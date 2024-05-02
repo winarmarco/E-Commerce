@@ -1,10 +1,5 @@
 import { z } from "zod";
-import { signIn } from "next-auth/react";
-import {
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
-} from "@/server/api/trpc";
+import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 
 export const userRouter = createTRPCRouter({
   hello: publicProcedure

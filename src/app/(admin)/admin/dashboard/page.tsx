@@ -6,16 +6,8 @@ import { DataTable } from "./_components/product_table";
 import { columns } from "./_components/columns";
 import { type Product } from "@prisma/client";
 import { Button } from "@/components/ui/button";
-import { Check, ChevronsUpDown, CirclePlus, Plus, Search } from "lucide-react";
+import { Check, ChevronsUpDown, Plus, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   Command,
   CommandEmpty,
@@ -29,7 +21,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Separator } from "@radix-ui/react-dropdown-menu";
+import { api } from "@/trpc/react";
 
 const frameworks: {
   value: string;
@@ -88,14 +80,21 @@ const data: Product[] = [
 ];
 
 const Dashboard = () => {
+  const { mutate: createCategoryAPI, isPending } =
+    api.category.createCategory.useMutation();
   const [searchInput, setSearchInput] = useState("");
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<string[]>([]);
 
-  const filteredCategory = frameworks.filter((framework) =>
-    framework.value.toLowerCase() == searchInput.toLowerCase()
+  const filteredCategory = frameworks.filter(
+    (framework) => framework.value.toLowerCase() == searchInput.toLowerCase(),
   );
 
+  const createCategory = async () => {
+    createCategoryAPI({
+      categoryName: searchInput,
+    });
+  };
 
   return (
     <div className="flex flex-col gap-y-10">
@@ -116,13 +115,13 @@ const Dashboard = () => {
                 variant="outline"
                 role="combobox"
                 aria-expanded={open}
-                className="w-[300px] justify-between"
+                className="w-[400px] justify-between"
               >
                 {value.length > 0
                   ? value.toString().length > 20
                     ? `${value.toString().slice(0, 20)}...`
                     : value.toString()
-                  : "Select Category..."}
+                  : "Select or Create Category..."}
                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
@@ -168,7 +167,15 @@ const Dashboard = () => {
                     ))}
 
                     {searchInput && filteredCategory.length == 0 && (
-                      <CommandItem key={searchInput} value={searchInput} className="font-medium">
+                      <CommandItem
+                        key={searchInput}
+                        value={searchInput}
+                        className="font-medium"
+                        onSelect={async () => {
+                          await createCategory();
+
+                        }}
+                      >
                         {`+ Create '${searchInput}' category`}
                       </CommandItem>
                     )}
@@ -177,31 +184,11 @@ const Dashboard = () => {
               </Command>
             </PopoverContent>
           </Popover>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button>
-                <Plus />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuItem>
-                <Link
-                  href="/admin/product/add"
-                  className="flex w-full items-center justify-between text-base"
-                >
-                  Add Product <Plus className="h-4 w-4" />
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link
-                  href="/admin/category/add"
-                  className="flex w-full items-center justify-between text-base"
-                >
-                  Add Category <Plus className="h-4 w-4" />
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Link href="/admin/product/add">
+            <Button className="">
+              Add Product <Plus className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
         </div>
         <DataTable columns={columns} data={data} />
       </div>

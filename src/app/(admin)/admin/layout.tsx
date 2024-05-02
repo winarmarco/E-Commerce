@@ -3,7 +3,7 @@ import "@/styles/globals.css";
 import { Inter } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
-import { AuthProvider } from "@/providers/SessionProvider";
+import { Toaster } from "react-hot-toast";
 import Link from "next/link";
 
 const inter = Inter({
@@ -42,6 +42,9 @@ export default function RootLayout({
             </nav>
             <div>{children}</div>
           </main>
+          <Toaster toastOptions={{
+            className: "h-[64px]"
+          }}/>
         </TRPCReactProvider>
       </body>
     </html>
