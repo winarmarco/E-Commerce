@@ -70,8 +70,8 @@ model User {
     accounts      Account[]
     sessions      Session[]
     // posts         Post[]
-    cartId        String    @unique
-    cart          Cart      @relation(fields: [cartId], references: [id])
+    cartId        String?    @unique
+    cart          Cart?      @relation(fields: [cartId], references: [id])
     Order         Order[]
 }
 
@@ -108,7 +108,15 @@ model Product {
     name        String
     description String
     cartItem    CartItem[]
-    productURL  String
+    categoryId  String 
+    category    Category    @relation(fields: [categoryId], references: [id])
+    imageURL  String
+}
+
+model Category {
+    id           String      @id @default(cuid())
+    categoryName String
+    product     Product[]
 }
 
 enum OrderStatus {
