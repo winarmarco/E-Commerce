@@ -5,7 +5,7 @@ import ProductCard from "./_components/product-card";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 
-export default async function Home() {
+export default async function ProductPage() {
   const session = await getServerAuthSession();
 
   const allProduct = await api.product.getAllProduct();

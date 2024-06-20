@@ -23,7 +23,9 @@ export default function RootLayout({
   return (
     <>
       <NavBar />
-      <main className="mx-auto max-w-7xl mt-[90px] py-8 min-h-[calc(100vh-90px)] z-10">{children}</main>
+      <main className="z-10 mx-auto mt-[90px] min-h-[calc(100vh-90px)] max-w-7xl py-8">
+        {children}
+      </main>
     </>
   );
 }

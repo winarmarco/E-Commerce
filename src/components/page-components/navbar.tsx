@@ -18,16 +18,16 @@ const NAVBAR_ITEMS: INavbarItem[] = [
   },
   {
     label: "Our Product",
-    link: "",
+    link: "/product",
   },
   {
     label: "My Cart",
-    link: "",
+    link: "/cart",
   },
 ];
 
 const NavBarItem: React.FC<{ item: INavbarItem }> = ({ item }) => {
-  return <li>{item.label}</li>;
+  return <li><Link href={item.link}>{item.label}</Link></li>;
 };
 
 const NavBar = async () => {
@@ -45,7 +45,7 @@ const NavBar = async () => {
         ))}
 
         <Link href={session ? "/api/auth/signout" : "/api/auth/signin"}>
-          <Button variant={session ? "destructive" : "default"}>
+          <Button variant={session ? "outline" : "default"}>
             {session ? "Sign out" : "Sign in"}
           </Button>
         </Link>
