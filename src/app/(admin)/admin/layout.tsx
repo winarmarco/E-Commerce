@@ -23,30 +23,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
-        <TRPCReactProvider>
-          <main className="mx-auto mt-[100px] grid w-full max-w-7xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
-            <nav
-              className="grid gap-4 text-sm text-muted-foreground"
-              x-chunk="dashboard-04-chunk-0"
-            >
-              <Link href="#" className="font-semibold text-primary">
-                PRODUCTS
-              </Link>
-              <Link href="#">OUTDOOR</Link>
-              <Link href="#">LIVING ROOMS</Link>
-              <Link href="#">KITCHEN</Link>
-              <Link href="#">BATHROOMS</Link>
-              <Link href="#">GARDEN</Link>
-            </nav>
-            <div>{children}</div>
-          </main>
-          <Toaster toastOptions={{
-            className: "h-[64px]"
-          }}/>
-        </TRPCReactProvider>
-      </body>
-    </html>
+    <>
+      <main className="mx-auto mt-[100px] grid w-full max-w-7xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
+        <nav
+          className="grid gap-4 text-sm text-muted-foreground"
+          x-chunk="dashboard-04-chunk-0"
+        >
+          <Link href="#" className="font-semibold text-primary">
+            PRODUCTS
+          </Link>
+          <Link href="#">OUTDOOR</Link>
+          <Link href="#">LIVING ROOMS</Link>
+          <Link href="#">KITCHEN</Link>
+          <Link href="#">BATHROOMS</Link>
+          <Link href="#">GARDEN</Link>
+        </nav>
+        <div>{children}</div>
+      </main>
+      <Toaster
+        toastOptions={{
+          className: "h-[64px]",
+        }}
+      />
+    </>
   );
 }

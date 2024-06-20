@@ -1,7 +1,6 @@
 "use client";
 
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { MoreHorizontal } from "lucide-react";
+import { BarChart, Edit, MoreHorizontal, Trash } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -12,11 +11,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { type Product } from "@prisma/client";
 import { type ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
+import { type inferRouterOutputs } from "@trpc/server";
+import { type AppRouter } from "@/server/api/root";
 
-export const columns: ColumnDef<Product>[] = [
+type GetAllProductOutput =
+  inferRouterOutputs<AppRouter>["product"]["getAllProduct"][0];
+
+export const columns: ColumnDef<GetAllProductOutput>[] = [
   {
     accessorKey: "imageURL",
     header: "Image",
@@ -33,7 +36,6 @@ export const columns: ColumnDef<Product>[] = [
           />
         </div>
       );
-      // return <Image src={}/>
     },
   },
   {
@@ -53,7 +55,10 @@ export const columns: ColumnDef<Product>[] = [
       return <div className="font-medium">{formatted}</div>;
     },
   },
-
+  {
+    accessorKey: "category.categoryName",
+    header: "Product Category",
+  },
   {
     id: "actions",
     cell: ({ row }) => {
@@ -69,14 +74,20 @@ export const columns: ColumnDef<Product>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            {/* <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem> */}
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>
+              <BarChart className="mr-2 h-4 w-4" />
+              View  Details
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <Edit className="mr-2 h-4 w-4" />
+              Edit Product
+            </DropdownMenuItem>
+            <DropdownMenuItem className="text-destructive">
+              <Trash className="mr-2 h-4 w-4" />
+              Delete Product
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

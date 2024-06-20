@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -28,6 +27,7 @@ import {
 } from "@/components/ui/select";
 import { api } from "@/trpc/react";
 import toaster from "react-hot-toast";
+import { toastError, toastSuccess } from "@/lib/utils";
 
 type IAddProduct = Omit<Product, "id">;
 
@@ -49,14 +49,10 @@ const CreateProductForm: React.FC<{
   const { mutate: createProductAPI, isPending } =
     api.product.createProduct.useMutation({
       onSuccess: (data) => {
-        toaster.success("Successfully created product!", {
-          position: "bottom-right",
-        });
+        toastSuccess("Successfully created product!");
       },
       onError: (error) => {
-        toaster.error(error.message, {
-          position: "bottom-right",
-        })
+        toastError(error.message)
       }
     });
 

@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
 import { AuthProvider } from "@/providers/SessionProvider";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,8 +26,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
         <TRPCReactProvider>
-          {children}
+          <AuthProvider>{children}</AuthProvider>
         </TRPCReactProvider>
+        <Toaster toastOptions={{
+            className: "h-[64px]"
+          }}/>
       </body>
     </html>
   );

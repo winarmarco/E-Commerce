@@ -34,8 +34,8 @@ const NavBar = async () => {
   const session = await getServerSession();
 
   return (
-    <nav className="w-full shadow-lg">
-      <div className="flex w-full max-w-7xl flex-row items-center justify-center py-4 mx-auto">
+    <nav className="w-full shadow-md fixed top-0 h-[90px] z-20 bg-white">
+      <div className="flex w-full h-full max-w-7xl flex-row items-center justify-center py-4 mx-auto">
 
       <div>LOGOs</div>
 
