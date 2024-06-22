@@ -1,7 +1,6 @@
 import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
-import NavBar from "@/components/page-components/navbar";
-import ProductCard from "./_components/product-card";
+import ProductCard from "./_components/ProductCard";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 

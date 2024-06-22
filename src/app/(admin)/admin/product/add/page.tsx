@@ -1,5 +1,5 @@
 import React from "react";
-import CreateProductForm from "./_components/create_product_form";
+import CreateProductForm from "./_components/CreateProductForm";
 import { api } from "@/trpc/server";
 
 const AddProductPage = async () => {
