@@ -10,10 +10,23 @@ import { type inferRouterOutputs } from "@trpc/server";
 import { type AppRouter } from "@/server/api/root";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { api } from "@/trpc/react";
+import { toastError, toastSuccess } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export const OrderCheckout: React.FC<{
   cartItems: inferRouterOutputs<AppRouter>["cart"]["getCart"];
 }> = ({ cartItems }) => {
+  const router = useRouter();
+  const { mutate: createOrder, isPending: isCreatingOrder } = api.order.createOrder.useMutation({
+    onSuccess: (data) => {
+      toastSuccess("Successfully created Order");
+      router.push(`/order-confirmation/${data.id}`);
+    },
+    onError: (err) => {
+      toastError(err.message);
+    }
+  });
   const form = useForm<z.infer<typeof CreateOrderSchema>>({
     resolver: zodResolver(CreateOrderSchema),
     defaultValues: {
@@ -32,12 +45,14 @@ export const OrderCheckout: React.FC<{
         cardNumber: "",
         expirationDate: "",
         cvc: "",
-      }
+      },
     },
   });
 
   const submitHandler = (values: z.infer<typeof CreateOrderSchema>) => {
-    console.log(values);
+    createOrder({
+      ...values,
+    });
   };
 
   const total = cartItems?.reduce(
@@ -76,7 +91,7 @@ export const OrderCheckout: React.FC<{
                 <h2>TOTAL</h2>
                 <h2 className="mr-5 text-end">$ {total}</h2>
               </div>
-              <Button className="mt-5 flex w-full" type="submit">
+              <Button className="mt-5 flex w-full" type="submit" disabled={isCreatingOrder}>
                 Checkout
               </Button>
             </div>

@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 
 import { env } from "@/env";
 
+// Function to create a new PrismaClient instance with environment-specific logging
 const createPrismaClient = () =>
   new PrismaClient({
     log:

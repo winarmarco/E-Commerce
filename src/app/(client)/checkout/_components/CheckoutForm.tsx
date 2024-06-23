@@ -23,7 +23,6 @@ import { Separator } from "@/components/ui/separator";
 const CheckoutForm: React.FC<{
   form: UseFormReturn<z.infer<typeof CreateOrderSchema>>;
 }> = ({ form }) => {
-
   return (
     <div className="flex h-full w-full flex-col space-y-8">
       <div className="flex flex-col space-y-4">
@@ -70,6 +69,16 @@ const CheckoutForm: React.FC<{
                       type="text"
                       className="w-full p-2 placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                       placeholder="XX-XXXX-XXX"
+                      onInput={(e) => {
+                        let inputValue = e.currentTarget.value;
+                        inputValue = inputValue.replace(/[^0-9/]/g, "");
+  
+                        if (inputValue.length > 15) {
+                          inputValue = inputValue.slice(0, 15);
+                        }
+  
+                        e.currentTarget.value = inputValue;
+                      }}
                     />
                   </div>
                 </FormControl>
@@ -183,16 +192,37 @@ const CheckoutForm: React.FC<{
                       {...field}
                       type="text"
                       className="w-full p-2 placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                      placeholder="MM"
-                    />
-                    <Separator orientation="vertical" />
-                    <p className="w-10 px-2 text-muted-foreground">/</p>
-                    <Separator orientation="vertical" />
-                    <input
-                      {...field}
-                      type="text"
-                      className="w-full p-2 placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                      placeholder="YY"
+                      placeholder="MM / YY"
+                      onInput={(e) => {
+                        const currentValue =
+                          form.getValues().creditCard.expirationDate;
+                        let inputValue = e.currentTarget.value;
+
+                        inputValue = inputValue.replace(/[^0-9/]/g, "");
+
+                        // Allow only one slash to be entered
+                        if (inputValue.split("/").length > 2) {
+                          inputValue = inputValue.substring(0, inputValue.length - 1);
+                        }
+
+                        // Automatically delete slash if user is deleting content
+                        if (inputValue.length === 3 && currentValue.length > inputValue.length ) {
+                          inputValue = inputValue.slice(0, -1);
+                        }
+
+                        // Automatically insert slash if necessary, when inputting
+                        if (inputValue.length === 2 && currentValue.length < inputValue.length
+                        ) {
+                          inputValue += "/";
+                        }
+
+                        // Limit to 5 characters (MM/YY)
+                        if (inputValue.length > 5) {
+                          inputValue = inputValue.substring(0, 5);
+                        }
+
+                        e.currentTarget.value = inputValue;
+                      }}
                     />
                   </div>
                 </FormControl>
@@ -211,6 +241,29 @@ const CheckoutForm: React.FC<{
                     placeholder="Card Number"
                     {...field}
                     className="col-span-2"
+                    onInput={(e) => {
+                      const currentValue =
+                        form.getValues().creditCard.cardNumber;
+                      let inputValue = e.currentTarget.value;
+
+                      inputValue = inputValue.replace(/[^0-9\s/]/g, "");
+
+                      // Automatically insert space if necessary, when inputting
+                      if ((inputValue.length + 1) % 5 == 0 && currentValue.length < inputValue.length ) {
+                        inputValue += " ";
+                      }
+
+                      // Automatically delete space if user is deleting content
+                      if (currentValue.length > inputValue.length) {
+                        inputValue = inputValue.trimEnd();
+                      }
+
+                      if (inputValue.length > 19) {
+                        inputValue = inputValue.slice(0, 19);
+                      }
+
+                      e.currentTarget.value = inputValue;
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
@@ -224,7 +277,21 @@ const CheckoutForm: React.FC<{
               <FormItem className="col-span-1">
                 <FormLabel>CVC</FormLabel>
                 <FormControl>
-                  <Input placeholder="CVC" {...field} />
+                  <Input
+                    placeholder="CVC"
+                    {...field}
+                    onInput={(e) => {
+                      let inputValue = e.currentTarget.value;
+
+                      inputValue = inputValue.replace(/[^0-9/]/g, "");
+
+                      if (inputValue.length > 3) {
+                        inputValue = inputValue.slice(0, 3);
+                      }
+
+                      e.currentTarget.value = inputValue;
+                    }}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

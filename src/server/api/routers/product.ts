@@ -4,6 +4,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
+import { generateProductCode } from "@/lib/utils";
 
 export const productRouter = createTRPCRouter({
   hello: publicProcedure
@@ -30,7 +31,10 @@ export const productRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const newProduct = await ctx.db.product.create({
-        data: input,
+        data: {
+          ...input,
+          productCode: generateProductCode(),
+        },
       });
 
       return newProduct;

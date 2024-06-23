@@ -10,7 +10,7 @@ interface INavbarItem {
 const NAVBAR_ITEMS: INavbarItem[] = [
   {
     label: "Home",
-    link: "",
+    link: "/",
   },
   {
     label: "About Us",

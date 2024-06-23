@@ -7,7 +7,6 @@ export default async function CheckoutPage() {
   return (
     <div className="sticky top-[calc(90px+2rem)]">
       <h1 className="py-8 text-3xl font-semibold">Checkout</h1>
-
       <OrderCheckout cartItems={cartItems} />
     </div>
   );
