@@ -30,13 +30,12 @@ export default function RootLayout({
           x-chunk="dashboard-04-chunk-0"
         >
           <Link href="#" className="font-semibold text-primary">
+            OVERVIEW
+          </Link>
+          <Link href="#" className="font-semibold text-primary">
             PRODUCTS
           </Link>
-          <Link href="#">OUTDOOR</Link>
-          <Link href="#">LIVING ROOMS</Link>
-          <Link href="#">KITCHEN</Link>
-          <Link href="#">BATHROOMS</Link>
-          <Link href="#">GARDEN</Link>
+          <Link href="#">ORDER</Link>
         </nav>
         <div>{children}</div>
       </main>

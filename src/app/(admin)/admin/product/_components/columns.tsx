@@ -1,6 +1,8 @@
 "use client";
-import { BarChart, Check, Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
-import { type ColumnDef } from "@tanstack/react-table";
+
+import { BarChart, Edit, MoreHorizontal, Trash } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,57 +11,54 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { type ColumnDef } from "@tanstack/react-table";
+import Image from "next/image";
 import { type inferRouterOutputs } from "@trpc/server";
 import { type AppRouter } from "@/server/api/root";
-import { Button } from "@/components/ui/button";
 
 type GetAllProductOutput =
-  inferRouterOutputs<AppRouter>["order"]["getAllOrder"][0];
+  inferRouterOutputs<AppRouter>["product"]["getAllProduct"][0];
 
 export const columns: ColumnDef<GetAllProductOutput>[] = [
   {
-    accessorKey: "orderCode",
-    header: "Order ID",
+    accessorKey: "imageURL",
+    header: "Image",
+    cell: (row) => {
+      const url = row.getValue() as string;
+
+      return (
+        <div className="relative h-[128px] w-[128px] overflow-clip rounded-md bg-muted">
+          <Image
+            src={url}
+            alt={url}
+            fill
+            className="z-0s rounded-md object-cover transition-transform"
+          />
+        </div>
+      );
+    },
   },
   {
-    accessorKey: "orderDateTime",
-    header: "Ordered Date",
-    accessorFn: (data) => {
-      return data.orderDateTime.toISOString().slice(0, 10);
-    }
-  },
-  {
-    id: "Name",
+    accessorKey: "name",
     header: "Name",
-    accessorFn: (data) => {
-      return `${data.lastName} ${data.firstName}`;
-    },
   },
-
   {
-    id: "Total",
-    header: "Total",
-    accessorFn: (data) => {
-      const total = data.orderItems.reduce((total, currItem) => total += (currItem.productPrice * currItem.quantity), 0);
-      return `$ ${total}`
+    accessorKey: "price",
+    header: "Price",
+    cell: (row) => {
+      const price = row.getValue() as number;
+      const formatted = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(price);
+
+      return <div className="font-medium">{formatted}</div>;
     },
   },
-
   {
-    accessorKey: "status",
-    header: "Status",
-    accessorFn: (data) => {
-      return data.status;
-    },
-    cell: ({row}) => {
-      const value: string = row.getValue("status");
-
-      return <div className="bg-orange-400 text-white rounded-sm px-2 w-min">
-        {value}
-      </div>
-    }
+    accessorKey: "category.categoryName",
+    header: "Product Category",
   },
-
   {
     id: "actions",
     cell: ({ row }) => {
@@ -82,17 +81,16 @@ export const columns: ColumnDef<GetAllProductOutput>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Check className="mr-2 h-4 w-4" />
-              Mark as Done
+              <Edit className="mr-2 h-4 w-4" />
+              Edit Product
             </DropdownMenuItem>
-
-            <DropdownMenuItem>
-              <Copy className="mr-2 h-4 w-4" />
-              Copy Order ID
+            <DropdownMenuItem className="text-destructive">
+              <Trash className="mr-2 h-4 w-4" />
+              Delete Product
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
     },
-  }
+  },
 ];

@@ -118,4 +118,13 @@ export const orderRouter = createTRPCRouter({
 
       return order;
     }),
+
+  getAllOrder: protectedProcedure.query(async ({ ctx, input }) => {
+    const order = await ctx.db.order.findMany({
+      include: {
+        orderItems: true,
+      },
+    });
+    return order;
+  }),
 });

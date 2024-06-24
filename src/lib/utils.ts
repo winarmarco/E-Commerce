@@ -1,6 +1,9 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import toaster from "react-hot-toast";
+import { parseISO, format, formatDate } from "date-fns";
+import { inferRouterOutputs } from "@trpc/server";
+import { AppRouter } from "@/server/api/root";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -51,4 +54,29 @@ export function getTomorrowDate(date: Date) {
   const tomorrow = new Date(date.getTime() + 3600 * 24 * 1000);
   tomorrow.setHours(0, 0, 0, 0); // Resets the time to midnight
   return tomorrow;
+}
+
+export function aggregateSalesData(
+  dailyData: inferRouterOutputs<AppRouter>["order"]["getAllOrder"],
+  formatStr = "MMM yyyy",
+) {
+  const group: Record<string, number> = {};
+
+  dailyData.forEach(({ orderDateTime, orderItems }) => {
+    const revenue = orderItems.reduce(
+      (total, currValue) =>
+        (total += currValue.quantity * currValue.productPrice),
+      0,
+    );
+    const formattedDateTime = formatDate(orderDateTime, formatStr);
+    if (!group[formattedDateTime]) {
+      group[formattedDateTime] = 0;
+    }
+    group[formattedDateTime] += revenue;
+  });
+
+  return Object.entries(group).map(([date, total]) => ({
+    date,
+    sales: total,
+  }));
 }
