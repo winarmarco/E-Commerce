@@ -1,55 +1,74 @@
+"use client";
 import { getServerSession } from "next-auth";
 import { Button, buttonVariants } from "../ui/button";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
 interface INavbarItem {
   label: string;
-  link: string;
+  url: string;
 }
 
 const NAVBAR_ITEMS: INavbarItem[] = [
   {
     label: "Home",
-    link: "/",
+    url: "/",
   },
   {
     label: "About Us",
-    link: "",
+    url: "#",
   },
   {
     label: "Our Product",
-    link: "/product",
+    url: "/product",
   },
   {
     label: "My Cart",
-    link: "/cart",
+    url: "/cart",
   },
 ];
 
 const NavBarItem: React.FC<{ item: INavbarItem }> = ({ item }) => {
-  return <li><Link href={item.link}>{item.label}</Link></li>;
-};
-
-const NavBar = async () => {
-  const session = await getServerSession();
+  const pathname = usePathname();
+  const isCurrentUrl = pathname === item.url;
 
   return (
-    <nav className="w-full shadow-md fixed top-0 h-[90px] z-20 bg-white">
-      <div className="flex w-full h-full max-w-7xl flex-row items-center justify-center py-4 mx-auto">
+    <li>
+      <Link
+        href={item.url}
+        className={isCurrentUrl ? `font-bold` : ""}
+      >
+        {item.label}
+      </Link>
+    </li>
+  );
+};
 
-      <div>LOGOs</div>
+const NavBar = () => {
+  const session = useSession();
 
-      <ul className="ml-auto flex flex-row items-center justify-center gap-x-5">
-        {NAVBAR_ITEMS.map((item) => (
-          <NavBarItem key={item.label} item={item} />
-        ))}
+  return (
+    <nav className="fixed top-0 z-20 h-[90px] w-full bg-white shadow-md">
+      <div className="mx-auto flex h-full w-full max-w-7xl flex-row items-center justify-center py-4">
+        <div>LOGOs</div>
 
-        <Link href={session ? "/api/auth/signout" : "/api/auth/signin"}>
-          <Button variant={session ? "outline" : "default"}>
-            {session ? "Sign out" : "Sign in"}
-          </Button>
-        </Link>
-      </ul>
+        <ul className="ml-auto flex flex-row items-center justify-center gap-x-5">
+          {NAVBAR_ITEMS.map((item) => (
+            <NavBarItem key={item.label} item={item} />
+          ))}
+
+          {session.status === "authenticated" && (
+            <Link href="/api/auth/signout">
+              <Button variant="outline">Sign out</Button>
+            </Link>
+          )}
+          {session.status === "unauthenticated" && (
+            <Link href="/api/auth/signin">
+              <Button>Sign in</Button>
+            </Link>
+          )}
+        </ul>
       </div>
     </nav>
   );

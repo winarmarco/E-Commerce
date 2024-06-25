@@ -110,6 +110,11 @@ export const orderRouter = createTRPCRouter({
         where: {
           id: orderId,
         },
+        include: {
+          shippingAddress: true,
+          author: true,
+          orderItems: true,
+        },
       });
 
       if (!order) throw Error(`Order ${orderId} not found!`);
@@ -127,4 +132,34 @@ export const orderRouter = createTRPCRouter({
     });
     return order;
   }),
+
+  markAsCompleted: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id: orderId } = input;
+      const order = await ctx.db.order.findFirst({
+        where: {
+          id: orderId,
+        },
+      });
+
+      if (!order) throw Error(`Order ${orderId} not found!`);
+
+      if (order.authorId != ctx.session.user.id) throw new Error("Unauthozied");
+
+      const updatedOrder = await ctx.db.order.update({
+        where: {
+          id: orderId,
+        },
+        data: {
+          status: OrderStatus.COMPLETED,
+        },
+      });
+
+      return updatedOrder;
+    }),
 });

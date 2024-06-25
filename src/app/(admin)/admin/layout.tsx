@@ -5,6 +5,8 @@ import { Inter } from "next/font/google";
 import { TRPCReactProvider } from "@/trpc/react";
 import { Toaster } from "react-hot-toast";
 import Link from "next/link";
+import NavBar from "@/components/page-components/navbar";
+import Sidebar from "./_components/Sidebar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,18 +27,7 @@ export default function RootLayout({
   return (
     <>
       <main className="mx-auto mt-[100px] grid w-full max-w-7xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
-        <nav
-          className="grid gap-4 text-sm text-muted-foreground"
-          x-chunk="dashboard-04-chunk-0"
-        >
-          <Link href="#" className="font-semibold text-primary">
-            OVERVIEW
-          </Link>
-          <Link href="#" className="font-semibold text-primary">
-            PRODUCTS
-          </Link>
-          <Link href="#">ORDER</Link>
-        </nav>
+        <Sidebar />
         <div>{children}</div>
       </main>
       <Toaster

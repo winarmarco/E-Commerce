@@ -1,5 +1,12 @@
 "use client";
-import { BarChart, Check, Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
+import {
+  BarChart,
+  Check,
+  Copy,
+  Edit,
+  MoreHorizontal,
+  Trash,
+} from "lucide-react";
 import { type ColumnDef } from "@tanstack/react-table";
 import {
   DropdownMenu,
@@ -12,6 +19,11 @@ import {
 import { type inferRouterOutputs } from "@trpc/server";
 import { type AppRouter } from "@/server/api/root";
 import { Button } from "@/components/ui/button";
+import { api } from "@/trpc/react";
+import { useRouter } from "next/navigation";
+import { toastSuccess } from "@/lib/utils";
+import { OrderStatus } from "@prisma/client";
+import OrderStatusBadge from "../order-status-badge";
 
 type GetAllProductOutput =
   inferRouterOutputs<AppRouter>["order"]["getAllOrder"][0];
@@ -26,13 +38,13 @@ export const columns: ColumnDef<GetAllProductOutput>[] = [
     header: "Ordered Date",
     accessorFn: (data) => {
       return data.orderDateTime.toISOString().slice(0, 10);
-    }
+    },
   },
   {
     id: "Name",
-    header: "Name",
+    header: "Customer Name",
     accessorFn: (data) => {
-      return `${data.lastName} ${data.firstName}`;
+      return `${data.firstName} ${data.lastName}`;
     },
   },
 
@@ -40,8 +52,12 @@ export const columns: ColumnDef<GetAllProductOutput>[] = [
     id: "Total",
     header: "Total",
     accessorFn: (data) => {
-      const total = data.orderItems.reduce((total, currItem) => total += (currItem.productPrice * currItem.quantity), 0);
-      return `$ ${total}`
+      const total = data.orderItems.reduce(
+        (total, currItem) =>
+          (total += currItem.productPrice * currItem.quantity),
+        0,
+      );
+      return `$ ${total}`;
     },
   },
 
@@ -51,19 +67,22 @@ export const columns: ColumnDef<GetAllProductOutput>[] = [
     accessorFn: (data) => {
       return data.status;
     },
-    cell: ({row}) => {
-      const value: string = row.getValue("status");
-
-      return <div className="bg-orange-400 text-white rounded-sm px-2 w-min">
-        {value}
-      </div>
-    }
+    cell: ({ row }) => {
+      const status: OrderStatus = row.getValue("status");
+      return <OrderStatusBadge status={status} />;
+    },
   },
 
   {
     id: "actions",
-    cell: ({ row }) => {
-      // const payment = row.original
+    cell: function ActionCompoennt({ row }) {
+      const router = useRouter();
+      const { mutate: markAsDone } = api.order.markAsCompleted.useMutation({
+        onSuccess: (data) => {
+          toastSuccess(`Order #${row.original.orderCode} has been completed!`);
+          router.refresh();
+        },
+      });
 
       return (
         <DropdownMenu>
@@ -76,16 +95,25 @@ export const columns: ColumnDef<GetAllProductOutput>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                router.push(`/admin/order/${row.original.id}`);
+              }}
+            >
               <BarChart className="mr-2 h-4 w-4" />
-              View  Details
+              View Details
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Check className="mr-2 h-4 w-4" />
-              Mark as Done
-            </DropdownMenuItem>
-
+            {row.original.status !== OrderStatus.COMPLETED && (
+              <DropdownMenuItem
+                onClick={() => {
+                  markAsDone({ id: row.original.id });
+                }}
+              >
+                <Check className="mr-2 h-4 w-4" />
+                Mark as Completed
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem>
               <Copy className="mr-2 h-4 w-4" />
               Copy Order ID
@@ -94,5 +122,5 @@ export const columns: ColumnDef<GetAllProductOutput>[] = [
         </DropdownMenu>
       );
     },
-  }
+  },
 ];
