@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { CreateOrderSchema } from "@/schema/Order";
-import { OrderItem, OrderStatus } from "@prisma/client";
+import { OrderStatus } from "@prisma/client";
 import {
   generateOrderCode,
   getTodayAtMidnight,
@@ -89,7 +89,7 @@ export const orderRouter = createTRPCRouter({
         });
 
         // Lastly delete cart and cartItems, and update user cart
-        const deletedCartItems = await prisma.cartItem.deleteMany({
+        await prisma.cartItem.deleteMany({
           where: { cartId: user.cartId },
         });
 
@@ -124,7 +124,7 @@ export const orderRouter = createTRPCRouter({
       return order;
     }),
 
-  getAllOrder: protectedProcedure.query(async ({ ctx, input }) => {
+  getAllOrder: protectedProcedure.query(async ({ ctx }) => {
     const order = await ctx.db.order.findMany({
       include: {
         orderItems: true,
@@ -132,6 +132,31 @@ export const orderRouter = createTRPCRouter({
     });
     return order;
   }),
+
+  queryOrder: protectedProcedure
+    .input(z.object({ query: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const { query } = input;
+      const orders = ctx.db.order.findMany({
+        include: {
+          orderItems: true,
+        },
+        where: {
+          id: {
+            contains: query,
+          },
+          firstName: {
+            contains: query,
+          },
+          lastName: {
+            contains: query,
+          },
+          status: OrderStatus[query as keyof typeof OrderStatus],
+        },
+      });
+
+      return orders;
+    }),
 
   markAsCompleted: protectedProcedure
     .input(

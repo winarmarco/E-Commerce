@@ -1,11 +1,7 @@
 import "@/styles/globals.css";
 
 import { Inter } from "next/font/google";
-
-import { TRPCReactProvider } from "@/trpc/react";
 import { Toaster } from "react-hot-toast";
-import Link from "next/link";
-import NavBar from "@/components/page-components/navbar";
 import Sidebar from "./_components/Sidebar";
 
 const inter = Inter({

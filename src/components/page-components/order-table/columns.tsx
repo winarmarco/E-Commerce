@@ -3,9 +3,7 @@ import {
   BarChart,
   Check,
   Copy,
-  Edit,
   MoreHorizontal,
-  Trash,
 } from "lucide-react";
 import { type ColumnDef } from "@tanstack/react-table";
 import {
@@ -78,7 +76,7 @@ export const columns: ColumnDef<GetAllProductOutput>[] = [
     cell: function ActionCompoennt({ row }) {
       const router = useRouter();
       const { mutate: markAsDone } = api.order.markAsCompleted.useMutation({
-        onSuccess: (data) => {
+        onSuccess: () => {
           toastSuccess(`Order #${row.original.orderCode} has been completed!`);
           router.refresh();
         },

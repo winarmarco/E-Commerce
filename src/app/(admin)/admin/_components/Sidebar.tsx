@@ -27,7 +27,7 @@ const Sidebar = () => {
       x-chunk="dashboard-04-chunk-0"
     >
       {SIDEBAR_LINKS.map((item, index) => {
-        const isCurrentUrl = item.url === currentUrl;
+        const isCurrentUrl = currentUrl.includes(item.url);
         return (
           <Link
             href={item.url}

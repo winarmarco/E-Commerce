@@ -1,6 +1,5 @@
 "use client";
-import { getServerSession } from "next-auth";
-import { Button, buttonVariants } from "../ui/button";
+import { Button } from "../ui/button";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";

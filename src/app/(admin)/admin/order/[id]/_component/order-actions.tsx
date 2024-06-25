@@ -14,7 +14,7 @@ const OrderActions: React.FC<{
 }> = ({ order }) => {
   const router = useRouter();
   const { mutate: markAsCompleted } = api.order.markAsCompleted.useMutation({
-    onSuccess: (data) => {
+    onSuccess: () => {
       router.refresh();
       toastSuccess(`Order #${order.orderCode} has been completed!`);
     },
