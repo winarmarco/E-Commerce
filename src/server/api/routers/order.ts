@@ -135,23 +135,38 @@ export const orderRouter = createTRPCRouter({
 
   queryOrder: protectedProcedure
     .input(z.object({ query: z.string() }))
-    .query(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const { query } = input;
       const orders = ctx.db.order.findMany({
         include: {
           orderItems: true,
         },
         where: {
-          id: {
-            contains: query,
-          },
-          firstName: {
-            contains: query,
-          },
-          lastName: {
-            contains: query,
-          },
-          status: OrderStatus[query as keyof typeof OrderStatus],
+          OR: [
+            {
+              id: {
+                contains: query,
+              },
+            },
+            {
+              firstName: {
+                contains: query,
+              },
+            },
+            {
+              lastName: {
+                contains: query,
+              },
+            },
+            {
+              orderCode: {
+                contains: query,
+              },
+            },
+            {
+              status: OrderStatus[query as keyof typeof OrderStatus],
+            },
+          ],
         },
       });
 

@@ -5,9 +5,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import React from "react";
-import OrderTableHeader from "@/components/page-components/order-table/order_table_header";
-import { DataTable } from "@/components/page-components/order-table/order_table";
-import { columns } from "@/components/page-components/order-table/columns";
+import { OrderTable } from "@/components/page-components/order-table/OrderTable";
 import { api } from "@/trpc/server";
 import BarChart from "./_components/BarChart";
 import { aggregateSalesData } from "@/lib/utils";
@@ -67,8 +65,8 @@ const Overview = async () => {
           </CardHeader>
 
           <div className="flex flex-col p-4">
-            <OrderTableHeader />
-            <DataTable columns={columns} data={allOrder} />
+            
+            <OrderTable data={allOrder} />
           </div>
         </Card>
       </div>
