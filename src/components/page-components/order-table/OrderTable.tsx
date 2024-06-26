@@ -32,7 +32,7 @@ export const OrderTable: React.FC<{
   }, [query, queryOrder]);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-y-4">
       <div className="flex h-10 w-full items-center rounded-md border border-input bg-white pl-3 text-sm ring-offset-background focus-within:ring-1 focus-within:ring-ring focus-within:ring-offset-2">
         <Search className="h-4 w-4" />
         <input

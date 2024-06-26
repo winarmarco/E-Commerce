@@ -50,6 +50,73 @@ export const productRouter = createTRPCRouter({
     return allProduct;
   }),
 
+  queryProduct: publicProcedure
+    .input(
+      z.object({
+        query: z.string(),
+        categoryFilter: z.optional(z.array(z.string())),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { query, categoryFilter } = input;
+      let filteredProducts;
+      if (categoryFilter && categoryFilter.length > 0) {
+        if (query.length > 0) {
+          filteredProducts = await ctx.db.product.findMany({
+            where: {
+              AND: [
+                {
+                  OR: [
+                    {
+                      name: {
+                        contains: query,
+                      },
+                    },
+                    {
+                      description: {
+                        contains: query,
+                      },
+                    },
+                  ],
+                },
+                {
+                  category: {
+                    categoryName: {
+                      in: categoryFilter,
+                    },
+                  },
+                },
+              ],
+            },
+            include: {
+              category: true,
+            },
+          });
+        } else {
+          filteredProducts = await ctx.db.product.findMany({
+            where: {
+              category: {
+                categoryName: {
+                  in: categoryFilter,
+                },
+              },
+            },
+            include: {
+              category: true,
+            },
+          });
+        }
+      } else {
+        filteredProducts = await ctx.db.product.findMany({
+          include: {
+            category: true,
+          },
+        });
+      }
+
+      return filteredProducts;
+    }),
+
   getProduct: publicProcedure
     .input(
       z.object({
