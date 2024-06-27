@@ -19,7 +19,6 @@ export const OrderTable: React.FC<{
   const {
     mutate: queryOrder,
     isPending,
-    isError,
     isSuccess,
   } = api.order.queryOrder.useMutation({
     onSuccess: (filteredOrder) => {

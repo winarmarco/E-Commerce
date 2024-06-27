@@ -51,7 +51,7 @@ const EditProductForm: React.FC<{
   const { id: productId, ...data } = product;
   const { mutate: editProductAPI, isPending } =
     api.product.editProduct.useMutation({
-      onSuccess: (data) => {
+      onSuccess: () => {
         toastSuccess("Successfully updated product!");
         router.push("/admin/product")
       },

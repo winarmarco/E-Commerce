@@ -50,7 +50,7 @@ const CreateProductForm: React.FC<{
   const router = useRouter();
   const { mutate: createProductAPI, isPending } =
     api.product.createProduct.useMutation({
-      onSuccess: (data) => {
+      onSuccess: () => {
         toastSuccess("Successfully created product!");
         router.push("/admin/product")
       },

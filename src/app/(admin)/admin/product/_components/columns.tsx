@@ -28,7 +28,7 @@ export const columns: ColumnDef<GetAllProductOutput>[] = [
     header: "Product Code",
     cell: (row) => {
 
-      return <div className="font-medium">{`#${row.getValue()}`}</div>;
+      return <div className="font-medium">{`#${row.getValue() as string}`}</div>;
     },
   },
   {
