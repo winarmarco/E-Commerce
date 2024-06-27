@@ -15,11 +15,22 @@ import { type ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import { type inferRouterOutputs } from "@trpc/server";
 import { type AppRouter } from "@/server/api/root";
+import { useRouter } from "next/navigation";
+import { api } from "@/trpc/react";
+import { toastSuccess } from "@/lib/utils";
 
 type GetAllProductOutput =
   inferRouterOutputs<AppRouter>["product"]["getAllProduct"][0];
 
 export const columns: ColumnDef<GetAllProductOutput>[] = [
+  {
+    accessorKey: "productCode",
+    header: "Product Code",
+    cell: (row) => {
+
+      return <div className="font-medium">{`#${row.getValue()}`}</div>;
+    },
+  },
   {
     accessorKey: "imageURL",
     header: "Image",
@@ -61,7 +72,15 @@ export const columns: ColumnDef<GetAllProductOutput>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
+    cell: function ActionCell({ row }) {
+      const router = useRouter();
+      const { mutate: deleteProductAPI, isPending } =
+        api.product.deleteProduct.useMutation({
+          onSuccess: () => {
+            toastSuccess("Successfully deleted Product")
+          }
+        });
+      const { id: productId } = row.original;
 
       return (
         <DropdownMenu>
@@ -74,16 +93,26 @@ export const columns: ColumnDef<GetAllProductOutput>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => router.push(`/admin/product/${productId}`)}
+            >
               <BarChart className="mr-2 h-4 w-4" />
-              View  Details
+              View Details
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => router.push(`/admin/product/${productId}/edit`)}
+            >
               <Edit className="mr-2 h-4 w-4" />
               Edit Product
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive">
+            <DropdownMenuItem
+              className="text-destructive"
+              disabled={isPending}
+              onClick={() => {
+                deleteProductAPI({ id: productId });
+              }}
+            >
               <Trash className="mr-2 h-4 w-4" />
               Delete Product
             </DropdownMenuItem>

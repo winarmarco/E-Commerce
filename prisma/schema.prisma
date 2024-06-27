@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+    provider        = "prisma-client-js"
     previewFeatures = ["relationJoins"]
 }
 
@@ -60,7 +60,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    cartId        String   @unique
+    cartId        String    @unique
     cart          Cart?     @relation(fields: [cartId], references: [id])
     order         Order[]
 }
@@ -102,7 +102,7 @@ model Product {
     productCode String
     price       Float
     name        String
-    description String
+    description String     @db.LongText
     cartItem    CartItem[]
     categoryId  String
     category    Category   @relation(fields: [categoryId], references: [id])
@@ -124,8 +124,8 @@ model Order {
     id                   String          @id @default(cuid())
     orderCode            String
     status               OrderStatus
-    orderDateTime        DateTime      
-    estimatedArrivalTime DateTime       
+    orderDateTime        DateTime
+    estimatedArrivalTime DateTime
     authorId             String
     author               User            @relation(fields: [authorId], references: [id])
     firstName            String

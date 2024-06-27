@@ -22,7 +22,7 @@ export function toastError(message: string) {
 }
 
 export function generateProductCode(length = 8): string {
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
   let result = "";
   const charactersLength = characters.length;
   for (let i = 0; i < length; i++) {
@@ -73,6 +73,31 @@ export function aggregateSalesData(
       group[formattedDateTime] = 0;
     }
     group[formattedDateTime] += revenue;
+  });
+
+  return Object.entries(group).map(([date, total]) => ({
+    date,
+    sales: total,
+  }));
+}
+
+export function aggregateProductSalesData(
+  dailyData: inferRouterOutputs<AppRouter>["order"]["getOrderWithProduct"],
+  productId: string,
+  formatStr = "MMM yyyy",
+) {
+  const group: Record<string, number> = {};
+
+  dailyData.forEach(({ orderDateTime, orderItems }) => {
+    const product = orderItems.find(
+      (orderItem) => orderItem.productRef === productId,
+    );
+    const productQty = product ? product.quantity : 0;
+    const formattedDateTime = formatDate(orderDateTime, formatStr);
+    if (!group[formattedDateTime]) {
+      group[formattedDateTime] = 0;
+    }
+    group[formattedDateTime] += productQty;
   });
 
   return Object.entries(group).map(([date, total]) => ({

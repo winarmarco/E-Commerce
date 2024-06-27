@@ -173,6 +173,29 @@ export const orderRouter = createTRPCRouter({
       return orders;
     }),
 
+  getOrderWithProduct: protectedProcedure
+    .input(
+      z.object({
+        productId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { productId } = input;
+
+      const orderWithProduct = await ctx.db.order.findMany({
+        include: { orderItems: true },
+        where: {
+          orderItems: {
+            some: {
+              productRef: productId,
+            },
+          },
+        },
+      });
+
+      return orderWithProduct;
+    }),
+
   markAsCompleted: protectedProcedure
     .input(
       z.object({

@@ -7,9 +7,9 @@ import {
 import React from "react";
 import { OrderTable } from "@/components/page-components/order-table/OrderTable";
 import { api } from "@/trpc/server";
-import BarChart from "./_components/BarChart";
 import { aggregateSalesData } from "@/lib/utils";
 import { CreditCard, DollarSign } from "lucide-react";
+import SalesBarChart from "./_components/SalesBarChart";
 
 const Overview = async () => {
   const allOrder = await api.order.getAllOrder();
@@ -55,7 +55,7 @@ const Overview = async () => {
             <CardDescription>Monthly sales overview</CardDescription>
           </CardHeader>
           <CardContent>
-            <BarChart data={statisticData} />
+            <SalesBarChart data={statisticData} />
           </CardContent>
         </Card>
 

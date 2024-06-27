@@ -26,13 +26,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { api } from "@/trpc/react";
-import toaster from "react-hot-toast";
 import { toastError, toastSuccess } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
-type IAddProduct = Omit<Product, "id" | "productCode">;
+type IEditProduct = Omit<Product, "id" | "productCode">;
 
-const CreateProductSchema: z.ZodType<IAddProduct> = z.object({
+const EditProductSchema: z.ZodType<IEditProduct> = z.object({
   name: z.string().min(1, { message: "Product name is required" }),
   description: z
     .string()
@@ -44,35 +43,33 @@ const CreateProductSchema: z.ZodType<IAddProduct> = z.object({
   imageURL: z.string().min(1, { message: "Image is required" }),
 });
 
-const CreateProductForm: React.FC<{
+const EditProductForm: React.FC<{
   categoryList: Category[];
-}> = ({ categoryList }) => {
+  product: Product;
+}> = ({ categoryList, product }) => {
   const router = useRouter();
-  const { mutate: createProductAPI, isPending } =
-    api.product.createProduct.useMutation({
+  const { id: productId, ...data } = product;
+  const { mutate: editProductAPI, isPending } =
+    api.product.editProduct.useMutation({
       onSuccess: (data) => {
-        toastSuccess("Successfully created product!");
+        toastSuccess("Successfully updated product!");
         router.push("/admin/product")
       },
       onError: (error) => {
-        toastError(error.message)
-      }
+        toastError(error.message);
+      },
     });
 
-  const form = useForm<z.infer<typeof CreateProductSchema>>({
-    resolver: zodResolver(CreateProductSchema),
+  const form = useForm<z.infer<typeof EditProductSchema>>({
+    resolver: zodResolver(EditProductSchema),
     defaultValues: {
-      name: "",
-      description: "",
-      price: 0,
-      categoryId: "",
-      imageURL: "",
+      ...data,
     },
   });
 
   // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof CreateProductSchema>) {
-    createProductAPI(values);
+  async function onSubmit(values: z.infer<typeof EditProductSchema>) {
+    editProductAPI({ id: productId, ...values });
   }
   return (
     <Form {...form}>
@@ -136,7 +133,7 @@ const CreateProductForm: React.FC<{
           render={({ field }) => (
             <FormItem>
               <FormLabel>Product Category</FormLabel>
-              <Select onValueChange={field.onChange}>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger className="w-[300px]">
                     <SelectValue placeholder="Select Product Category" />
@@ -179,4 +176,4 @@ const CreateProductForm: React.FC<{
   );
 };
 
-export default CreateProductForm;
+export default EditProductForm;

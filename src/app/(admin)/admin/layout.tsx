@@ -22,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <>
-      <main className="mx-auto mt-[100px] grid w-full max-w-7xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
+      <main className="mx-auto my-[100px] grid w-full max-w-7xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
         <Sidebar />
         <div>{children}</div>
       </main>

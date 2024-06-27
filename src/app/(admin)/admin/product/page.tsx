@@ -1,7 +1,5 @@
 import { api } from "@/trpc/server";
 import { ProductTable } from "./_components/product_table";
-import ProductTableHeader from "./_components/product_table_header";
-
 
 const Dashboard = async () => {
   const allProduct = await api.product.getAllProduct();

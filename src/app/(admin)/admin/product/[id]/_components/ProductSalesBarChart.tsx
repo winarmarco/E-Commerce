@@ -23,7 +23,7 @@ ChartJS.register(
   TimeScale,
 );
 
-interface DateBarChartProps {
+interface ProductSalesBarChartProps {
   data: {
     date: string,
     sales: number
@@ -31,7 +31,7 @@ interface DateBarChartProps {
   title?: string,
 }
 
-const DateBarChart: React.FC<DateBarChartProps> = ({ data, title = "Monthly Sales" }) => {
+const ProductSalesBarChart: React.FC<ProductSalesBarChartProps> = ({ data, title = "Monthly Sales" }) => {
   const labels = data.map((d) => (d.date));
   const sales = data.map((d) => d.sales);
   const chartData = {
@@ -87,4 +87,4 @@ const DateBarChart: React.FC<DateBarChartProps> = ({ data, title = "Monthly Sale
   );
 };
 
-export default DateBarChart;
+export default ProductSalesBarChart;

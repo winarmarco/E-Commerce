@@ -30,14 +30,68 @@ export const productRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      let productCode = generateProductCode();
+      let isTaken = true;
+
+      while (isTaken) {
+        const productWithProductCode = await ctx.db.product.findFirst({
+          where: { productCode },
+        });
+
+        if (!productWithProductCode) isTaken = false;
+
+        productCode = generateProductCode();
+      }
+
       const newProduct = await ctx.db.product.create({
         data: {
           ...input,
-          productCode: generateProductCode(),
+          productCode,
         },
       });
 
       return newProduct;
+    }),
+
+  editProduct: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string().min(1, { message: "Product name is required" }),
+        description: z
+          .string()
+          .min(1, { message: "Product Description is required" }),
+        price: z.coerce
+          .number()
+          .min(0.01, { message: "Price should be positive number" }),
+        categoryId: z.string().min(1, { message: "Category is required" }),
+        imageURL: z.string().min(1, { message: "Image is required" }),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, ...data } = input;
+
+      const updatedProduct = await ctx.db.product.update({
+        where: {
+          id,
+        },
+        data,
+      });
+
+      return updatedProduct;
+    }),
+
+  deleteProduct: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { id } = input;
+      const deletedProduct = ctx.db.product.delete({
+        where: {
+          id,
+        },
+      });
+
+      return deletedProduct;
     }),
 
   getAllProduct: publicProcedure.query(async ({ ctx }) => {

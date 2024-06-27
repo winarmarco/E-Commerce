@@ -26,10 +26,15 @@ export const OrderTable: React.FC<{
       setFilteredData(filteredOrder);
     },
   });
-
+  // Trigger queryOrder when `query` changes
   useEffect(() => {
     queryOrder({ query });
   }, [query, queryOrder]);
+
+  // Update filteredData when `data` changes
+  useEffect(() => {
+    setFilteredData(data);
+  }, [data]);
 
   return (
     <div className="flex flex-col gap-y-4">

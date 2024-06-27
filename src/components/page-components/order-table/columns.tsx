@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import { toastSuccess } from "@/lib/utils";
 import { OrderStatus } from "@prisma/client";
 import OrderStatusBadge from "../order-status-badge";
+import React from "react";
 
 type GetAllProductOutput =
   inferRouterOutputs<AppRouter>["order"]["getAllOrder"][0];
@@ -73,10 +74,12 @@ export const columns: ColumnDef<GetAllProductOutput>[] = [
 
   {
     id: "actions",
-    cell: function ActionCompoennt({ row }) {
+    cell: function ActionComponent({ row }) {
+      "use client";
       const router = useRouter();
+    
       const { mutate: markAsDone } = api.order.markAsCompleted.useMutation({
-        onSuccess: () => {
+        onSuccess: async () => {
           toastSuccess(`Order #${row.original.orderCode} has been completed!`);
           router.refresh();
         },

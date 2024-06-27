@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { type Dispatch, type SetStateAction, useState } from "react";
 import {
   Command,
   CommandEmpty,
@@ -13,7 +13,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
+import { Check, ChevronsUpDown } from "lucide-react";
 import { cn, toastError, toastSuccess } from "@/lib/utils";
 import { api } from "@/trpc/react";
 
