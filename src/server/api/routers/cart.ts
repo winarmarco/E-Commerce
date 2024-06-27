@@ -21,7 +21,11 @@ export const cartRouter = createTRPCRouter({
         cartId: user.cartId,
       },
       include: {
-        product: true,
+        product: {
+          include: {
+            category: true,
+          },
+        },
       },
     });
 

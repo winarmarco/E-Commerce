@@ -66,7 +66,7 @@ export default function CartPage() {
               <div className="flex flex-row items-center gap-x-20">
                 <div className="relative h-[128px] w-[128px] overflow-hidden rounded-sm">
                   <Image
-                    src="https://images.unsplash.com/photo-1581539250439-c96689b516dd?q=80&w=1965&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    src={cartItem.product.imageURL}
                     alt="image"
                     className="h-full w-full object-cover object-center"
                     width={0}
@@ -76,7 +76,7 @@ export default function CartPage() {
                 </div>
                 <div>
                   <p>{cartItem.product.name}</p>
-                  <p className="text-slate-300">Product Category</p>
+                  <p className="text-slate-300">{cartItem.product.category.categoryName}</p>
                 </div>
               </div>
               <p className="text-center">$ {cartItem.product.price}</p>
