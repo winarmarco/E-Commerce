@@ -11,6 +11,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 import { env } from "@/env";
 import { db } from "@/server/db";
+import { signIn } from "./api/routers/user/user.services";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -23,15 +24,11 @@ declare module "next-auth" {
     user: {
       id: string;
       username: string;
-      // ...other properties
-      // role: UserRole;
     } & DefaultSession["user"];
   }
 
   interface User extends DefaultUser {
     username: string;
-    // ...other properties
-    // role: UserRole;
   }
 }
 
@@ -61,10 +58,6 @@ export const authOptions: NextAuthOptions = {
   },
   adapter: PrismaAdapter(db) as Adapter,
   providers: [
-    // DiscordProvider({
-    //   clientId: env.DISCORD_CLIENT_ID,
-    //   clientSecret: env.DISCORD_CLIENT_SECRET,
-    // }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -73,20 +66,14 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials, req) {
         if (!credentials?.username || !credentials?.password) return null;
-        const user = await db.user.findFirst({
-          where: {
-            username: credentials.username,
-          },
-        });
+        const { username, password } = credentials;
+        const response = await signIn({ username, password });
+        const { id } = response.user;
 
-        if (user?.password == credentials.password) {
-          return {
-            id: user.id,
-            username: user.username,
-          };
-        } else {
-          return null;
-        }
+        return {
+          id,
+          username,
+        };
       },
     }),
   ],

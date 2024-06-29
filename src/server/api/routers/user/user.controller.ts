@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { signUp, signIn } from "./user.services";
 
 export const userRouter = createTRPCRouter({
   hello: publicProcedure
@@ -13,18 +14,21 @@ export const userRouter = createTRPCRouter({
   signup: publicProcedure
     .input(
       z.object({
+        firstName: z.string(),
+        lastName: z.string(),
         username: z.string(),
         password: z.string(),
-        email: z.string(),
+        email: z.string().email(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const newUser = await ctx.db.user.create({
-        data: {
-          username: input.username,
-          password: input.password,
-          email: input.email,
-        },
+      const { firstName, lastName, username, password, email } = input;
+      const newUser = await signUp({
+        firstName,
+        lastName,
+        username,
+        password,
+        email,
       });
 
       return newUser;
@@ -39,23 +43,8 @@ export const userRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { username, password } = input;
+      const success = await signIn({ username, password });
+
+      return success;
     }),
-
-  // create: protectedProcedure
-  //   .input(z.object({ username: z.string(), password: z.string() }))
-  //   .signup(async ({ ctx, input }) => {
-  //     // simulate a slow db call
-
-  //   }),
-
-  // getLatest: protectedProcedure.query(({ ctx }) => {
-  //   return ctx.db.post.findFirst({
-  //     orderBy: { createdAt: "desc" },
-  //     where: { createdBy: { id: ctx.session.user.id } },
-  //   });
-  // }),
-
-  // getSecretMessage: protectedProcedure.query(() => {
-  //   return "you can now see this secret message!";
-  // }),
 });

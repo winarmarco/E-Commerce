@@ -75,7 +75,7 @@ export const OrderCheckout: React.FC<{
                 {cartItems.map((cartItem) => (
                   <div
                     key={cartItem.productId}
-                    className="grid grid-cols-[3fr_1fr_1fr] gap-x-2"
+                    className="grid grid-cols-[2fr_1fr_1fr] gap-x-2"
                   >
                     <h2>{cartItem.product.name}</h2>
                     <h2 className="text-end">{cartItem.quantity} x </h2>

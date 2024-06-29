@@ -20,6 +20,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { api } from "@/trpc/react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const loginSchema = z.object({
   username: z.string().min(3),
@@ -27,9 +29,7 @@ const loginSchema = z.object({
 });
 
 const SignInPage = () => {
-  // const { mutate: signUp, isPending } = api.user.signup.useMutation();
-  // const { mutate: signIn, isPending } = api.user.signIn.useMutation();
-
+  const router = useRouter();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -40,18 +40,37 @@ const SignInPage = () => {
 
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     // console.log(values);
-    const {username, password} = values;
-    await signIn("credentials", {
+    const { username, password } = values;
+    const res = await signIn("credentials", {
       username,
       password,
-      redirect: true,
-      callbackUrl: "http://localhost:3000/"
+      redirect: false,
     });
+
+    if (!res) return form.setError("root", { message: "Failed Signing in" });
+
+    if (res.ok) {
+      return router.push("/");
+    }
+
+    if (res.error) {
+      form.setError("root", { message: "Credentials not found" });
+    }
   };
+
   return (
-    <div className="mx-auto my-auto w-[500px]">
+    <div className="w-[500px]">
+      <h1 className="mb-8 text-3xl font-semibold">LOGIN</h1>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        {form.formState.errors.root && (
+          <p className="mb-4 text-sm font-medium text-destructive">
+            {form.formState.errors.root.message}
+          </p>
+        )}
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-y-6"
+        >
           <FormField
             control={form.control}
             name="username"
@@ -78,9 +97,12 @@ const SignInPage = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button type="submit" className="mt-10">
+            Submit
+          </Button>
         </form>
       </Form>
+      <p className="mt-8">Don't have an account? <Link href="/sign-up" className="underline">Sign up</Link></p>
     </div>
   );
 };

@@ -4,16 +4,9 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
+import { createNewCategory, fetchAllCategory } from "./category.services";
 
 export const categoryRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
-    }),
-
   createCategory: protectedProcedure
     .input(
       z.object({
@@ -21,18 +14,14 @@ export const categoryRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const newCategory = await ctx.db.category.create({
-        data: {
-          categoryName: input.categoryName,
-        },
-      });
+      const { categoryName } = input;
+      const newCategory = await createNewCategory({ categoryName });
 
       return newCategory;
     }),
 
   getAllCategory: protectedProcedure.query(async ({ ctx }) => {
-    const allCategory = await ctx.db.category.findMany();
-
+    const allCategory = await fetchAllCategory();
     return allCategory;
   }),
 });

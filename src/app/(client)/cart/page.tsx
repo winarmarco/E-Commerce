@@ -114,7 +114,7 @@ export default function CartPage() {
 
       <div className="my-4 mt-10 flex  w-full max-w-7xl justify-end gap-6 px-5">
         <Link href="/checkout">
-          <Button>
+          <Button >
             Proceed to checkout <ArrowRightIcon className="ml-2" />{" "}
           </Button>
         </Link>
