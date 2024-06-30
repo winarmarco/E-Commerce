@@ -49,7 +49,7 @@ const NavBar = () => {
 
   return (
     <nav className="fixed top-0 z-20 h-[90px] w-full bg-white shadow-md">
-      <div className="mx-auto flex h-full w-full max-w-7xl flex-row items-center justify-center py-4">
+      <div className="mx-auto flex h-full w-full max-w-[90rem] flex-row items-center justify-center py-4">
         <div>
           <Logo />
         </div>

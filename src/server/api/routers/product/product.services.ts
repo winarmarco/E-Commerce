@@ -2,6 +2,7 @@ import { Product } from "@prisma/client";
 import {
   createProduct,
   deleteProductById,
+  getLatestProduct,
   getProductById,
   getProductByProductCode,
   getProductWithQuery,
@@ -16,7 +17,7 @@ import { generateProductCode } from "./utils";
  * @returns {Promise<Product>} A promise that resolves to the newly created product.
  */
 export const createNewProduct = async (
-  product: Omit<Product, "id" | "productCode">,
+  product: Omit<Product, "id" | "productCode" | "dateAdded">,
 ) => {
   const { name, description, price, categoryId, imageURL } = product;
   let productCode = generateProductCode();
@@ -71,6 +72,15 @@ export const fetchAllProduct = async () => {
 };
 
 /**
+ * Retrieves newest products.
+ * @returns {Promise<Product[]>} A promise that resolves to an array of all products.
+ */
+export const fetchNewestProduct = async ({ limit }: { limit: number }) => {
+  const products = await getLatestProduct({ limit });
+  return products;
+};
+
+/**
  * Queries products based on a search term and optional category filters.
  * @param {string} query - Search query to filter products.
  * @param {string[]} categoryFilter - Optional category filters to apply.
@@ -92,7 +102,9 @@ export const queryProduct = async ({
  * @param {Omit<Product, "productCode">} product - New product details to update, excluding product code.
  * @returns {Promise<Product>} A promise that resolves to the updated product.
  */
-export const updateProduct = async (product: Omit<Product, "productCode">) => {
+export const updateProduct = async (
+  product: Omit<Product, "productCode" | "dateAdded">,
+) => {
   const { id: productId, ...data } = product;
 
   // Ensure product exists before attempting update

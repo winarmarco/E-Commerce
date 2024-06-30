@@ -6,9 +6,11 @@ import { Product } from "@prisma/client";
  * @param {Omit<Product, "id">} product - Product details excluding the ID.
  * @returns {Promise<Product>} A promise that resolves to the created product.
  */
-export const createProduct = async (product: Omit<Product, "id">) => {
+export const createProduct = async (
+  product: Omit<Product, "id" | "dateAdded">,
+) => {
   const newProduct = await db.product.create({
-    data: product,
+    data: { ...product, dateAdded: new Date() },
   });
   return newProduct;
 };
@@ -19,6 +21,21 @@ export const createProduct = async (product: Omit<Product, "id">) => {
  */
 export const getProducts = async () => {
   const products = await db.product.findMany({});
+  return products;
+};
+
+/**
+ * Retrieves 2 newest products from the database.
+ * @returns {Promise<Product[]>} A promise that resolves to an array of products.
+ */
+export const getLatestProduct = async ({ limit }: { limit: number }) => {
+  const products = await db.product.findMany({
+    take: limit,
+    orderBy: {
+      dateAdded: "desc",
+    },
+  });
+
   return products;
 };
 
@@ -95,7 +112,7 @@ export const getProductWithQuery = async ({
  * @returns {Promise<Product>} A promise that resolves to the updated product.
  */
 export const updateProductById = async (
-  product: Omit<Product, "productCode">,
+  product: Omit<Product, "productCode" | "dateAdded">,
 ) => {
   const { id, ...data } = product;
   const updatedProduct = await db.product.update({

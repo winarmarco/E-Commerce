@@ -29,7 +29,7 @@ import { api } from "@/trpc/react";
 import { toastError, toastSuccess } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
-type IEditProduct = Omit<Product, "id" | "productCode">;
+type IEditProduct = Omit<Product, "id" | "productCode" | "dateAdded">;
 
 const EditProductSchema: z.ZodType<IEditProduct> = z.object({
   name: z.string().min(1, { message: "Product name is required" }),

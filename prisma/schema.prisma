@@ -80,7 +80,6 @@ model User {
     order         Order[]
 }
 
-
 model ShippingAddress {
     id       String  @id @default(cuid())
     country  String
@@ -122,6 +121,7 @@ model Product {
     cartItem    CartItem[]
     categoryId  String
     category    Category   @relation(fields: [categoryId], references: [id])
+    dateAdded   DateTime   @default(now())
     imageURL    String
 }
 

@@ -9,10 +9,12 @@ import {
   createNewProduct,
   deleteProduct,
   fetchAllProduct,
+  fetchNewestProduct,
   fetchProductById,
   queryProduct,
   updateProduct,
 } from "./product.services";
+import { getLatestProduct } from "./product.repository";
 
 /**
  * Defines the schema for creating a new product, including validations for each field.
@@ -64,6 +66,14 @@ export const productRouter = createTRPCRouter({
     const allProduct = await fetchAllProduct();
     return allProduct;
   }),
+
+  getLatestProduct: publicProcedure
+    .input(z.object({ limit: z.number() }))
+    .query(async ({ input }) => {
+      const { limit } = input;
+      const newestProducts = fetchNewestProduct({ limit });
+      return newestProducts;
+    }),
 
   queryProduct: publicProcedure
     .input(

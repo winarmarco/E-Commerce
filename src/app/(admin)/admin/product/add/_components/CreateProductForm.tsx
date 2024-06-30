@@ -30,7 +30,7 @@ import toaster from "react-hot-toast";
 import { toastError, toastSuccess } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
-type IAddProduct = Omit<Product, "id" | "productCode">;
+type IAddProduct = Omit<Product, "id" | "productCode" | "dateAdded">;
 
 const CreateProductSchema: z.ZodType<IAddProduct> = z.object({
   name: z.string().min(1, { message: "Product name is required" }),
