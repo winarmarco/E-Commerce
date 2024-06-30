@@ -1,6 +1,6 @@
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
-import { productRouter } from "./routers/product";
 import { db } from "../db";
+import { productRouter } from "./routers/product/product.controller";
 import { cartRouter } from "./routers/cart/cart.controller";
 import { orderRouter } from "./routers/order/order.controller";
 import { categoryRouter } from "./routers/category/category.controller";

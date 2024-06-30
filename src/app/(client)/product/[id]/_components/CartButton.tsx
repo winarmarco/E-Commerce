@@ -12,15 +12,17 @@ import toast from "react-hot-toast";
 
 const CartButton: React.FC<{
   productId: string;
-  cart: CartItem[];
-}> = ({ cart, productId }) => {
-  const product = cart.find((cart) => cart.productId === productId);
+}> = ({ productId }) => {
+  const {data: cart} = api.cart.getCart.useQuery();
+  const productInCart = cart?.find((cart) => cart.productId === productId);
   const session = useSession();
-  const router = useRouter();
+  const router = useRouter();  
+  const utils = api.useUtils();
+
   const { mutate: addToCartAPI, isPending: isAddingToCart } = api.cart.addToCart.useMutation({
     onSuccess: async (data) => {
       toastSuccess(`Added item from cart!`);
-      router.refresh();
+      utils.cart.getCart.invalidate();
     },
   });
 
@@ -28,17 +30,17 @@ const CartButton: React.FC<{
     api.cart.removeFromCart.useMutation({
       onSuccess: async (data) => {
         toastSuccess(`Removed item from cart!`);
-        router.refresh();
+        utils.cart.getCart.invalidate();
       },
     });
 
   return (
     <>
-      {!session && <Button>HELLO</Button>}
-      {!product ? (
+      {!productInCart ? (
         <Button
           onClick={() => {
-            addToCartAPI({ productId: productId });
+            if (session.status === "authenticated") return addToCartAPI({ productId: productId });
+            return router.push("/sign-in");
           }}
         >
           Add to Cart +
@@ -54,7 +56,7 @@ const CartButton: React.FC<{
           >
             -
           </Button>
-          <p>{product?.quantity}</p>
+          <p>{productInCart?.quantity}</p>
           <Button
             onClick={() => {
               addToCartAPI({ productId });

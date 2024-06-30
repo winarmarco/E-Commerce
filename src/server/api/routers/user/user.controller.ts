@@ -1,15 +1,17 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { signUp, signIn } from "./user.services";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "@/server/api/trpc";
+import { signUp, signIn, fetchUserRole } from "./user.services";
 
 export const userRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
-    }),
+  getUserRole: protectedProcedure.query(async ({ ctx, input }) => {
+    const { id } = ctx.session.user;
+    const role = await fetchUserRole({ id });
+    return role;
+  }),
 
   signup: publicProcedure
     .input(

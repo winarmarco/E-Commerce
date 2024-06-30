@@ -69,7 +69,7 @@ const EditProductForm: React.FC<{
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof EditProductSchema>) {
-    editProductAPI({ id: productId, ...values });
+    editProductAPI({ productId, ...values });
   }
   return (
     <Form {...form}>

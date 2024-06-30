@@ -36,13 +36,10 @@ const NavBarItem: React.FC<{ item: INavbarItem }> = ({ item }) => {
 
   return (
     <li>
-      <Link
-        href={item.url}
-        className={isCurrentUrl ? `font-bold` : ""}
-      >
+      <Link href={item.url} className={isCurrentUrl ? `font-bold` : ""}>
         {item.label.toUpperCase()}
       </Link>
-      {isCurrentUrl && <Separator className="bg-gray-700 h-0.5 rounded-sm"/>}
+      {isCurrentUrl && <Separator className="h-0.5 rounded-sm bg-gray-700" />}
     </li>
   );
 };
@@ -53,12 +50,18 @@ const NavBar = () => {
   return (
     <nav className="fixed top-0 z-20 h-[90px] w-full bg-white shadow-md">
       <div className="mx-auto flex h-full w-full max-w-7xl flex-row items-center justify-center py-4">
-        <div><Logo /></div>
+        <div>
+          <Logo />
+        </div>
 
         <ul className="ml-auto flex flex-row items-center justify-center gap-x-8">
-          {NAVBAR_ITEMS.map((item) => (
-            <NavBarItem key={item.label} item={item} />
-          ))}
+          {NAVBAR_ITEMS.map((item) => {
+            if (session.status === "unauthenticated") {
+              return (item.label !== "My Cart") && <NavBarItem key={item.label} item={item} />
+            } else {
+              return <NavBarItem key={item.label} item={item} />
+            }
+          })}
 
           {session.status === "authenticated" && (
             <Link href="/api/auth/signout">

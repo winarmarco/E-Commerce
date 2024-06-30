@@ -6,6 +6,12 @@ import {
 } from "./user.repository";
 import { validatePassword } from "./utils";
 
+export const fetchUserRole = async ({ id }: { id: string }) => {
+  const user = await fetchUser({ id });
+
+  return user.role;
+};
+
 export const fetchUser = async ({ id }: { id: string }) => {
   const user = await getUserById({ id });
 

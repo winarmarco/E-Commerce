@@ -4,12 +4,15 @@ import { api } from "@/trpc/server";
 import Image from "next/image";
 import React from "react";
 import CartButton from "./_components/CartButton";
+import { inferRouterOutputs } from "@trpc/server";
+import { AppRouter } from "@/server/api/root";
+import { getServerAuthSession } from "@/server/auth";
 
 const page: React.FC<{
   params: { id: string };
 }> = async ({ params }) => {
   const product = await api.product.getProduct({ productId: params.id });
-  const userCart = await api.cart.getCart();
+
   if (!product) return <h1>Product not found :/</h1>;
 
   const formattedPrice = new Intl.NumberFormat("en-US", {
@@ -41,7 +44,7 @@ const page: React.FC<{
             Price: <span className="font-semibold">{formattedPrice}</span>
           </p>
           <div className="pt-8">
-            <CartButton cart={userCart} productId={product.id} />
+            <CartButton productId={product.id} />
           </div>
         </div>
       </div>

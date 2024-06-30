@@ -6,11 +6,13 @@ import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
 import { ArrowRightIcon, Loader2 } from "lucide-react";
 import { toastSuccess } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 export default function CartPage() {
   const router = useRouter();
+  const session = useSession();
   const utils = api.useUtils();
   const { data: cartItems, isPending } = api.cart.getCart.useQuery();
   const { mutate: addToCartAPI, isPending: isAddingToCart } =
@@ -33,6 +35,8 @@ export default function CartPage() {
   const total = cartItems?.reduce((total, cartItem) => {
     return total + cartItem.product.price * cartItem.quantity;
   }, 0);
+
+  if (session.status === "unauthenticated") return redirect("/");
 
   return (
     <div className="sticky top-[calc(90px+2rem)]">

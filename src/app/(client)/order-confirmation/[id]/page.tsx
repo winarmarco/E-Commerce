@@ -1,12 +1,19 @@
+import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
 
 const OrderConfirmation: React.FC<{ params: { id: string } }> = async ({
   params,
 }) => {
   const { id: orderId } = params;
+  const session = await getServerAuthSession();
+  if (!session) return redirect("/");
+
+
   const order = await api.order.getOrder({ id: orderId });
+
   
   return (
     <div className="flex h-[calc(100vh-90px-4rem)] flex-col justify-center text-center">

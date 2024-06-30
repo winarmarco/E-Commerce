@@ -1,5 +1,9 @@
 import { CreateOrderSchema } from "@/schema/Order";
-import { createTRPCRouter, protectedProcedure } from "../../trpc";
+import {
+  adminProcedure,
+  createTRPCRouter,
+  protectedProcedure,
+} from "../../trpc";
 
 import { z } from "zod";
 import {
@@ -34,7 +38,7 @@ export const orderRouter = createTRPCRouter({
       return order;
     }),
 
-  getOrderWithProduct: protectedProcedure
+  getOrderWithProduct: adminProcedure
     .input(
       z.object({
         productId: z.string().cuid(),
@@ -46,12 +50,12 @@ export const orderRouter = createTRPCRouter({
       return orderWithProduct;
     }),
 
-  getAllOrder: protectedProcedure.query(async () => {
+  getAllOrder: adminProcedure.query(async () => {
     const orders = await getAllOrder();
     return orders;
   }),
 
-  queryOrder: protectedProcedure
+  queryOrder: adminProcedure
     .input(z.object({ query: z.string() }))
     .mutation(async ({ input }) => {
       const { query } = input;
@@ -59,7 +63,7 @@ export const orderRouter = createTRPCRouter({
       return orders;
     }),
 
-  markAsCompleted: protectedProcedure
+  markAsCompleted: adminProcedure
     .input(z.object({ id: z.string().cuid() }))
     .mutation(async ({ input }) => {
       const { id: orderId } = input;

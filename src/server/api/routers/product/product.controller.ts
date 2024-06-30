@@ -1,5 +1,6 @@
 import { z } from "zod";
 import {
+  adminProcedure,
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
@@ -32,14 +33,14 @@ const CreateProductSchema = z.object({
  * Creates the product routes for the API, defining each endpoint's functionality and access control.
  */
 export const productRouter = createTRPCRouter({
-  createProduct: protectedProcedure
+  createProduct: adminProcedure
     .input(CreateProductSchema)
     .mutation(async ({ input }) => {
       const newProduct = await createNewProduct({ ...input });
       return newProduct;
     }),
 
-  editProduct: protectedProcedure
+  editProduct: adminProcedure
     .input(
       CreateProductSchema.extend({
         productId: z.string().cuid(),
@@ -51,7 +52,7 @@ export const productRouter = createTRPCRouter({
       return updatedProduct;
     }),
 
-  deleteProduct: protectedProcedure
+  deleteProduct: adminProcedure
     .input(z.object({ productId: z.string().cuid() }))
     .mutation(async ({ input }) => {
       const { productId } = input;

@@ -3,6 +3,9 @@ import "@/styles/globals.css";
 import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import Sidebar from "./_components/Sidebar";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { api } from "@/trpc/server";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -15,11 +18,17 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession();
+  if (!session) return redirect("/sign-in");
+  console.log(session);
+  const role = await api.user.getUserRole({id: session.user.id});
+  if (role === "USER") return redirect("/");
+
   return (
     <>
       <main className="mx-auto my-[100px] grid w-full max-w-7xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">

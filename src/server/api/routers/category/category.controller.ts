@@ -1,5 +1,6 @@
 import { z } from "zod";
 import {
+  adminProcedure,
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
@@ -7,7 +8,7 @@ import {
 import { createNewCategory, fetchAllCategory } from "./category.services";
 
 export const categoryRouter = createTRPCRouter({
-  createCategory: protectedProcedure
+  createCategory: adminProcedure
     .input(
       z.object({
         categoryName: z.string(),
