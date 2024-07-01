@@ -36,6 +36,23 @@ export default async function HomePage() {
         </div>
       </div>
 
+      <div id="about-us" className="mb-[2rem] flex h-[calc(60vh-90px-4rem)] w-full">
+        <div className="relative h-full w-full">
+          <Image
+            src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="home"
+            layout="fill"
+            objectFit="cover"
+          />
+          <div className="absolute inset-0 h-full w-full bg-black opacity-10"></div>
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-white ">
+            <h1 className="text-3xl text-center px-[250px]">
+              “At Essentia, we embrace simplicity to elevate your everyday living with thoughtfully designed, timeless products that inspire and bring harmony to your space. Discover refined simplicity with Essentia”
+            </h1>
+          </div>
+        </div>
+      </div>
+
       <div className="mb-[2rem]  h-[calc(60vh-90px-4rem)]">
         <div className="grid h-full w-full grid-cols-2 gap-x-6">
           {newestProducts.slice(0, 2).map((product, index) => (

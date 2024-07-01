@@ -94,10 +94,66 @@ export const getProductWithQuery = async ({
   let filteredProducts;
   // Conditional logic to apply category filters and search query.
   if (categoryFilter && categoryFilter.length > 0) {
-    // Further detailed implementation...
+    let filter;
+    if (query.length > 0) {
+      filter = {
+        AND: [
+          {
+            OR: [
+              {
+                name: {
+                  contains: query,
+                },
+              },
+              {
+                description: {
+                  contains: query,
+                },
+              },
+            ],
+          },
+          {
+            category: {
+              categoryName: {
+                in: categoryFilter,
+              },
+            },
+          },
+        ],
+      };
+    } else {
+      filter = {
+        category: {
+          categoryName: {
+            in: categoryFilter,
+          },
+        },
+      };
+    }
+
+    filteredProducts = await db.product.findMany({
+      where: filter,
+      include: {
+        category: true,
+      },
+    });
   } else {
     // Return all products if no specific filters are applied.
     filteredProducts = await db.product.findMany({
+      where: {
+        OR: [
+          {
+            name: {
+              contains: query,
+            },
+          },
+          {
+            description: {
+              contains: query,
+            },
+          },
+        ],
+      },
       include: {
         category: true,
       },

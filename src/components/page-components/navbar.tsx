@@ -2,9 +2,10 @@
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import Logo from "../logo";
 import { Separator } from "../ui/separator";
+import { useEffect, useId, useState } from "react";
 
 interface INavbarItem {
   label: string;
@@ -15,10 +16,6 @@ const NAVBAR_ITEMS: INavbarItem[] = [
   {
     label: "Home",
     url: "/",
-  },
-  {
-    label: "About Us",
-    url: "#",
   },
   {
     label: "Our Product",
@@ -36,7 +33,7 @@ const NavBarItem: React.FC<{ item: INavbarItem }> = ({ item }) => {
 
   return (
     <li>
-      <Link href={item.url} className={isCurrentUrl ? `font-bold` : ""}>
+      <Link href={item.url} className={isCurrentUrl ? `font-bold` : ""} scroll>
         {item.label.toUpperCase()}
       </Link>
       {isCurrentUrl && <Separator className="h-0.5 rounded-sm bg-gray-700" />}

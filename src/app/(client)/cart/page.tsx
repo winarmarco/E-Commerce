@@ -42,7 +42,7 @@ export default function CartPage() {
     <div className="sticky top-[calc(90px+2rem)]">
       <h1 className="py-8 text-3xl font-semibold">My Cart</h1>
 
-      <div className="mb-4 grid w-full max-w-7xl grid-cols-[2fr_1fr_1fr] items-start gap-6 px-5">
+      <div className="mb-4 grid w-full max-w-[90rem] grid-cols-[2fr_1fr_1fr] items-start gap-6 px-5">
         <p>Product</p>
         <p className="text-center">Price</p>
         <p className="mr-10 text-end">Quantity</p>
@@ -65,7 +65,7 @@ export default function CartPage() {
           cartItems?.map((cartItem) => (
             <div
               key={cartItem.id}
-              className="mb-4 grid w-full max-w-7xl grid-cols-[2fr_1fr_1fr] items-center gap-6 px-5"
+              className="mb-4 grid w-full max-w-[90rem] grid-cols-[2fr_1fr_1fr] items-center gap-6 px-5"
             >
               <div className="flex flex-row items-center gap-x-20">
                 <div className="relative h-[128px] w-[128px] overflow-hidden rounded-sm">
@@ -111,12 +111,12 @@ export default function CartPage() {
       </div>
 
       <Separator />
-      <div className="my-8 grid w-full max-w-7xl grid-cols-[3fr_1fr] justify-end gap-6 px-5">
+      <div className="my-8 grid w-full max-w-[90rem] grid-cols-[3fr_1fr] justify-end gap-6 px-5">
         <p className="mr-5 text-right">SUBTOTAL</p>
         <p className="mr-5 text-right text-xl font-bold">$ {total ?? "-"}</p>
       </div>
 
-      <div className="my-4 mt-10 flex  w-full max-w-7xl justify-end gap-6 px-5">
+      <div className="my-4 mt-10 flex  w-full max-w-[90rem] justify-end gap-6 px-5">
         <Link href="/checkout">
           <Button >
             Proceed to checkout <ArrowRightIcon className="ml-2" />{" "}

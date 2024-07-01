@@ -25,13 +25,12 @@ export default async function RootLayout({
 }) {
   const session = await getServerSession();
   if (!session) return redirect("/sign-in");
-  console.log(session);
-  const role = await api.user.getUserRole({id: session.user.id});
-  if (role === "USER") return redirect("/");
 
+  const role = await api.user.getUserRole();
+  if (role === "USER") return redirect("/");
   return (
     <>
-      <main className="mx-auto my-[100px] grid w-full max-w-7xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
+      <main className="mx-auto my-[100px] grid w-full max-w-[90rem] items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
         <Sidebar />
         <div>{children}</div>
       </main>
