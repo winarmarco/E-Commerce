@@ -12,19 +12,22 @@ export const SearchProduct = () => {
   const [query] = useDebounce(searchInput, 1000);
   const searchParams = useSearchParams();
 
-  const createQueryString = useCallback((key: string, value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set(key, value);
+  const createQueryString = useCallback(
+    (key: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (value.length > 0) {
+        params.set(key, value);
+      } else {
+        params.delete(key);
+      }
 
-    return params.toString();
-  }, [searchParams]);
+      return params.toString();
+    },
+    [searchParams],
+  );
 
   useEffect(() => {
-    if (query) {
-      router.push("/product?" + createQueryString("q", query));
-    } else {
-      router.push("/product");
-    }
+    router.push("/product?" + createQueryString("q", query));
   }, [query]);
 
   return (

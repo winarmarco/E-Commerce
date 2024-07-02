@@ -4,6 +4,7 @@ import ProductCard from "./_components/ProductCard";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { SearchProduct } from "./_components/SearchProduct";
+import CategoryFilter from "./_components/CategoryFilter";
 
 export default async function ProductPage({
   searchParams,
@@ -11,13 +12,33 @@ export default async function ProductPage({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const { category, q } = searchParams;
-  const categoryFilter = typeof category === "string" ? [category] : category;
+  const categoryFilter = typeof category === "string" ? [category] : (category);
   const queryText = typeof q === "string" ? q : "";
   const allCategory = await api.category.getAllCategory();
   const products = await api.product.queryProduct({
     query: queryText,
     categoryFilter: categoryFilter,
   });
+
+  const createFilterText = (queryText?: string, categoryFilter?: string[]) => {
+    let combinedFilterText: string[] = [];
+    if (queryText) combinedFilterText.push(queryText);
+    if (categoryFilter && categoryFilter.length > 0) combinedFilterText = combinedFilterText.concat(...categoryFilter);
+
+    combinedFilterText = combinedFilterText.map((value) => `"${value}"`);
+
+    let filterText = "";
+    if (combinedFilterText.length > 1) {
+      const lastFilter = combinedFilterText[combinedFilterText.length - 1];
+      const beforeLastFilter = combinedFilterText.slice(0, combinedFilterText.length - 1).join(", ");
+      filterText = beforeLastFilter + " and "  + lastFilter;
+    } else if (combinedFilterText.length === 1) {
+      filterText += combinedFilterText[0];
+    }
+
+    return filterText;
+    
+  }
 
   return (
     <div className="sticky top-[calc(90px+2rem)]">
@@ -30,31 +51,11 @@ export default async function ProductPage({
         >
 
           <SearchProduct />
-          <div className="mt-5 flex flex-col gap-4">
-            <Link
-              href="/product"
-              className={!categoryFilter ? "font-semibold text-primary" : ""}
-            >
-              ALL PRODUCT
-            </Link>
-            {allCategory.map((category) => {
-              const { id, categoryName } = category;
-              const isSelected = categoryFilter?.includes(categoryName);
-              return (
-                <Link
-                  key={id}
-                  className={isSelected ? "font-semibold text-primary" : ""}
-                  href={`?category=${categoryName}`}
-                >
-                  {categoryName}
-                </Link>
-              );
-            })}
-          </div>
+          <CategoryFilter allCategory={allCategory} categoryFilter={categoryFilter}/>
         </nav>
         <div>
-        {queryText && <p className="text-sm mb-4 text-slate-400">
-            {products.length} "{queryText}"  Products found
+        {(queryText || categoryFilter) && <p className="text-sm mb-4 text-slate-400">
+            {products.length} {createFilterText(queryText, categoryFilter)}  Products found
           </p>}
           <div className="grid grid-cols-3 gap-x-10 gap-y-10">
             {products.length > 0 && (
