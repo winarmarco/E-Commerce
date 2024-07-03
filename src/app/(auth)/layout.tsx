@@ -1,14 +1,5 @@
 import "@/styles/globals.css";
 
-import { Inter } from "next/font/google";
-
-import NavBar from "@/components/page-components/navbar";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
-
 export const metadata = {
   title: "ESSENTIA",
   description: "An E-commerce app",

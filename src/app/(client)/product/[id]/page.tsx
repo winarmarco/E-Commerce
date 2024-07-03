@@ -1,12 +1,8 @@
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { api } from "@/trpc/server";
 import Image from "next/image";
 import React from "react";
 import CartButton from "./_components/CartButton";
-import { inferRouterOutputs } from "@trpc/server";
-import { AppRouter } from "@/server/api/root";
-import { getServerAuthSession } from "@/server/auth";
 
 const page: React.FC<{
   params: { id: string };

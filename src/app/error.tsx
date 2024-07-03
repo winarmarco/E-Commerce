@@ -1,6 +1,6 @@
 "use client";
 
-import { TRPCError } from "@trpc/server";
+import { type TRPCError } from "@trpc/server";
 import { redirect } from "next/navigation";
 
 const Error: React.FC<{error: TRPCError}> = ({error}) => {

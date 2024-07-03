@@ -1,5 +1,5 @@
 import { db } from "@/server/db";
-import { Product } from "@prisma/client";
+import { type Product } from "@prisma/client";
 
 /**
  * Creates a new product entry in the database.
@@ -173,7 +173,7 @@ export const updateProductById = async (
   const { id, ...data } = product;
   const updatedProduct = await db.product.update({
     where: {
-      id: product.id,
+      id,
     },
     data,
   });

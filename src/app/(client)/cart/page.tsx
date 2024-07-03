@@ -17,7 +17,7 @@ export default function CartPage() {
   const { data: cartItems, isPending } = api.cart.getCart.useQuery();
   const { mutate: addToCartAPI, isPending: isAddingToCart } =
     api.cart.addToCart.useMutation({
-      onSuccess: async (data) => {
+      onSuccess: async () => {
         toastSuccess(`Added item from cart!`);
         await utils.cart.getCart.invalidate();
       },
@@ -25,7 +25,7 @@ export default function CartPage() {
 
   const { mutate: removeFromCartAPI, isPending: isRemovingFromCart } =
     api.cart.removeFromCart.useMutation({
-      onSuccess: async (data) => {
+      onSuccess: async () => {
         toastSuccess(`Removed item from cart!`);
         router.refresh();
         await utils.cart.getCart.invalidate();

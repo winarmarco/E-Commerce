@@ -1,10 +1,9 @@
-import { z } from "zod";
 import {
   adminProcedure,
   createTRPCRouter,
-  protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
+import { z } from "zod";
 import {
   createNewProduct,
   deleteProduct,
@@ -14,7 +13,6 @@ import {
   queryProduct,
   updateProduct,
 } from "./product.services";
-import { getLatestProduct } from "./product.repository";
 
 /**
  * Defines the schema for creating a new product, including validations for each field.

@@ -1,27 +1,22 @@
 "use client";
-import React from "react";
 import * as z from "zod";
 
-import { type User } from "@prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { db } from "@/server/db";
 
-import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { api } from "@/trpc/react";
-import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const loginSchema = z.object({
   username: z.string().min(3),
@@ -102,7 +97,7 @@ const SignInPage = () => {
           </Button>
         </form>
       </Form>
-      <p className="mt-8">Don't have an account? <Link href="/sign-up" className="underline">Sign up</Link></p>
+      <p className="mt-8">{"Don't have an account? "}<Link href="/sign-up" className="underline">Sign up</Link></p>
     </div>
   );
 };

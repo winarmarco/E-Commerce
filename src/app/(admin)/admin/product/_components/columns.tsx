@@ -110,7 +110,7 @@ export const columns: ColumnDef<GetAllProductOutput>[] = [
               className="text-destructive"
               disabled={isPending}
               onClick={() => {
-                deleteProductAPI({ id: productId });
+                deleteProductAPI({ productId });
               }}
             >
               <Trash className="mr-2 h-4 w-4" />

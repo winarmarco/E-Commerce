@@ -12,12 +12,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { type Category, type Product } from "@prisma/client";
-import { z } from "zod";
-import { Textarea } from "@/components/ui/textarea";
-import { DollarSign } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -25,10 +19,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { api } from "@/trpc/react";
-import toaster from "react-hot-toast";
+import { Textarea } from "@/components/ui/textarea";
 import { toastError, toastSuccess } from "@/lib/utils";
+import { api } from "@/trpc/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { type Category, type Product } from "@prisma/client";
+import { DollarSign } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 type IAddProduct = Omit<Product, "id" | "productCode" | "dateAdded">;
 

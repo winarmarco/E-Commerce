@@ -1,11 +1,10 @@
 "use client";
-import { Button } from "../ui/button";
-import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { useParams, usePathname } from "next/navigation";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Logo from "../logo";
+import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
-import { useEffect, useId, useState } from "react";
 
 interface INavbarItem {
   label: string;

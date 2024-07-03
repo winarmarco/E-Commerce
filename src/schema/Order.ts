@@ -1,4 +1,4 @@
-import { OrderStatus, type ShippingAddress, type Order } from "@prisma/client";
+import { type Order, type ShippingAddress } from "@prisma/client";
 import { z } from "zod";
 
 type IShippingAddress = Omit<ShippingAddress, "id">;

@@ -1,8 +1,7 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 
@@ -28,7 +27,7 @@ export const SearchProduct = () => {
 
   useEffect(() => {
     router.push("/product?" + createQueryString("q", query));
-  }, [query]);
+  }, [query, createQueryString, router]);
 
   return (
     <div className="flex h-10 w-full items-center rounded-md border border-input bg-white pl-3 text-sm ring-offset-background focus-within:ring-1 focus-within:ring-ring focus-within:ring-offset-2">

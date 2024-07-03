@@ -1,15 +1,12 @@
-import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
-import ProductCard from "./_components/ProductCard";
-import Link from "next/link";
-import { Input } from "@/components/ui/input";
-import { SearchProduct } from "./_components/SearchProduct";
 import CategoryFilter from "./_components/CategoryFilter";
+import ProductCard from "./_components/ProductCard";
+import { SearchProduct } from "./_components/SearchProduct";
 
 export default async function ProductPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Record<string, string | string[] | undefined>;
 }) {
   const { category, q } = searchParams;
   const categoryFilter = typeof category === "string" ? [category] : (category);

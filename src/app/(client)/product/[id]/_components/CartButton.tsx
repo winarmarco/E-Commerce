@@ -2,13 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import { toastSuccess } from "@/lib/utils";
-import { type AppRouter } from "@/server/api/root";
 import { api } from "@/trpc/react";
-import { type CartItem } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import toast from "react-hot-toast";
 
 const CartButton: React.FC<{
   productId: string;
@@ -20,17 +16,17 @@ const CartButton: React.FC<{
   const utils = api.useUtils();
 
   const { mutate: addToCartAPI, isPending: isAddingToCart } = api.cart.addToCart.useMutation({
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       toastSuccess(`Added item from cart!`);
-      utils.cart.getCart.invalidate();
+      await utils.cart.getCart.invalidate();
     },
   });
 
   const { mutate: removeFromCartAPI, isPending: isRemovingFromCart } =
     api.cart.removeFromCart.useMutation({
-      onSuccess: async (data) => {
+      onSuccess: async () => {
         toastSuccess(`Removed item from cart!`);
-        utils.cart.getCart.invalidate();
+        await utils.cart.getCart.invalidate();
       },
     });
 

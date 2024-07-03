@@ -1,15 +1,14 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import {
-  type DefaultUser,
   getServerSession,
   type DefaultSession,
+  type DefaultUser,
   type NextAuthOptions,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 // import DiscordProvider from "nexts-auth/providers/discord";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-import { env } from "@/env";
 import { db } from "@/server/db";
 import { signIn } from "./api/routers/user/user.services";
 
@@ -64,7 +63,7 @@ export const authOptions: NextAuthOptions = {
         username: {},
         password: {},
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         if (!credentials?.username || !credentials?.password) return null;
         const { username, password } = credentials;
         const response = await signIn({ username, password });

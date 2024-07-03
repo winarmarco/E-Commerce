@@ -7,7 +7,7 @@ import {
 import { signUp, signIn, fetchUserRole } from "./user.services";
 
 export const userRouter = createTRPCRouter({
-  getUserRole: protectedProcedure.query(async ({ ctx, input }) => {
+  getUserRole: protectedProcedure.query(async ({ ctx }) => {
     const { id } = ctx.session.user;
     const role = await fetchUserRole({ id });
     return role;
@@ -23,7 +23,7 @@ export const userRouter = createTRPCRouter({
         email: z.string().email(),
       }),
     )
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ input }) => {
       const { firstName, lastName, username, password, email } = input;
       const newUser = await signUp({
         firstName,
@@ -43,7 +43,7 @@ export const userRouter = createTRPCRouter({
         password: z.string(),
       }),
     )
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ input }) => {
       const { username, password } = input;
       const success = await signIn({ username, password });
 

@@ -1,10 +1,9 @@
-import { z } from "zod";
 import {
   adminProcedure,
   createTRPCRouter,
   protectedProcedure,
-  publicProcedure,
 } from "@/server/api/trpc";
+import { z } from "zod";
 import { createNewCategory, fetchAllCategory } from "./category.services";
 
 export const categoryRouter = createTRPCRouter({
@@ -14,14 +13,14 @@ export const categoryRouter = createTRPCRouter({
         categoryName: z.string(),
       }),
     )
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ input }) => {
       const { categoryName } = input;
       const newCategory = await createNewCategory({ categoryName });
 
       return newCategory;
     }),
 
-  getAllCategory: protectedProcedure.query(async ({ ctx }) => {
+  getAllCategory: protectedProcedure.query(async ({}) => {
     const allCategory = await fetchAllCategory();
     return allCategory;
   }),

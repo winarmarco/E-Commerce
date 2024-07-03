@@ -2,23 +2,18 @@
 
 import React from "react";
 
-import { Button } from "@/components/ui/button";
 import {
-  Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { UseFormReturn } from "react-hook-form";
-import { z } from "zod";
-import { api } from "@/trpc/react";
-import toaster from "react-hot-toast";
-import { toastError, toastSuccess } from "@/lib/utils";
-import { CreateOrderSchema } from "@/schema/Order";
 import { Separator } from "@/components/ui/separator";
+import { type CreateOrderSchema } from "@/schema/Order";
+import { type UseFormReturn } from "react-hook-form";
+import { type z } from "zod";
 
 const CheckoutForm: React.FC<{
   form: UseFormReturn<z.infer<typeof CreateOrderSchema>>;

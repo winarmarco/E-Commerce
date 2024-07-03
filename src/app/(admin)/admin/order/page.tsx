@@ -1,6 +1,5 @@
-import { api } from "@/trpc/server";
-import { columns } from "@/components/page-components/order-table/columns";
 import { OrderTable } from "@/components/page-components/order-table/OrderTable";
+import { api } from "@/trpc/server";
 
 const OrderPage = async () => {
   const allOrder = await api.order.getAllOrder();

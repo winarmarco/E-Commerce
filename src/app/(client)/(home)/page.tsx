@@ -89,7 +89,7 @@ export default async function HomePage() {
       <div className="my-[8rem] flex w-full flex-col gap-y-10">
         <h1 className="text-3xl font-semibold">Our Latest Product</h1>
         <div className="grid h-full w-full grid-cols-4 gap-x-6">
-          {newestProducts.map((product, index) => (
+          {newestProducts.map((product) => (
             <div key={product.id} className="relative ">
               <ProductCard product={product} />
             </div>

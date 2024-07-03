@@ -1,5 +1,4 @@
 import { db } from "@/server/db";
-import crypto from "crypto";
 import { hashPassword } from "./utils";
 
 export const getUserByEmail = async ({ email }: { email: string }) => {

@@ -1,7 +1,7 @@
-import { Product } from "@prisma/client";
+import { type Product } from "@prisma/client";
 import { z } from "zod";
 
-type IAddProduct = Omit<Product, "id">;
+type IAddProduct = Omit<Product, "id" | "productCode" | "dateAdded">;
 
 export const CreateProductSchema: z.ZodType<IAddProduct> = z.object({
   name: z.string().min(1, { message: "Product name is required" }),

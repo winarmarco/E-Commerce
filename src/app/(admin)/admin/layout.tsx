@@ -1,16 +1,11 @@
 import "@/styles/globals.css";
 
-import { Inter } from "next/font/google";
-import { Toaster } from "react-hot-toast";
-import Sidebar from "./_components/Sidebar";
+import { api } from "@/trpc/server";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { api } from "@/trpc/server";
+import { Toaster } from "react-hot-toast";
+import Sidebar from "./_components/Sidebar";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
 
 export const metadata = {
   title: "ESSENTIA",

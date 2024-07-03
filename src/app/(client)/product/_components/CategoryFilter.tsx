@@ -1,8 +1,8 @@
 "use client";
-import { AppRouter } from "@/server/api/root";
-import { inferRouterOutputs } from "@trpc/server";
+import { type AppRouter } from "@/server/api/root";
+import { type inferRouterOutputs } from "@trpc/server";
 import Link from "next/link";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import React, { useCallback } from "react";
 
 const CategoryFilter: React.FC<{

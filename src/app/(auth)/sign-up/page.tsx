@@ -1,11 +1,8 @@
 "use client";
-import React from "react";
 import * as z from "zod";
 
-import { type User } from "@prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { db } from "@/server/db";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -29,7 +26,7 @@ const loginSchema = z.object({
 });
 
 const SignInPage = () => {
-  const { mutate: signUp, isPending } = api.user.signup.useMutation({
+  const { mutate: signUp } = api.user.signup.useMutation({
     onError: (error) => {
       const {message: errMessage} = error;
       if (errMessage.includes("email")) {

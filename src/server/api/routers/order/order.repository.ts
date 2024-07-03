@@ -5,11 +5,11 @@ import {
 } from "@/lib/utils";
 import { db } from "@/server/db";
 import {
-  CartItem,
-  OrderItem,
+  type CartItem,
+  type OrderItem,
   OrderStatus,
-  Product,
-  ShippingAddress,
+  type Product,
+  type ShippingAddress,
 } from "@prisma/client";
 
 /**
