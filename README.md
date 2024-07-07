@@ -2,6 +2,8 @@
 
 An furniture e-commerce web application that was buiild designed to provide a robust, scalable solution for building an online store, complete with user authentication, product management, and a dynamic, responsive UI.
 
+## Screenshots
+
 
 ## Features
 
@@ -34,13 +36,13 @@ These instructions will get you a copy of the project up and running on your loc
 ### Instalation
 1. **Clone the repository:**
    ```bash
-     git clone https://github.com/winarmarco/E-Commerce.git
-     cd E-Commerce
+   git clone https://github.com/winarmarco/E-Commerce.git
+   cd E-Commerce
    ```
 
 2. **Install dependencies:**
    ```
-     npm install
+   npm install
    ```
 
 3. **Set up environment variables:**
