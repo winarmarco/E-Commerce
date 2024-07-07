@@ -123,3 +123,6 @@ This project is licensed under the MIT License - see the LICENSE.md file for det
 Thank you for visiting our project. We hope it helps you to build or learn something valuable. 
 
 Feel free to customize this template to better fit the specifics of your project or add any additional sections that might be relevant. Once you're satisfied with the content, simply create a `README.md` file in your repository and paste this markdown content into it.
+
+## Project Status
+Completed
