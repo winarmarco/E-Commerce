@@ -18,19 +18,19 @@ const OrderSummary: React.FC<{
           {orderItems.map((orderItem) => (
             <div
               key={orderItem.id}
-              className="grid grid-cols-[4fr_1fr] gap-x-2"
+              className="grid grid-cols-[2fr_1fr_1fr] gap-x-2"
             >
               <h2>{orderItem.productName}</h2>
-              <div className="flex flex-row w-full">
-                <h2 className="text-end w-full">{orderItem.quantity} x </h2>
-                <h2 className="mr-5 text-end w-full">$ {orderItem.productPrice}</h2>
-              </div>
+              <h2 className="text-end">{orderItem.quantity} x </h2>
+              <h2 className="mr-5 text-end">
+                $ {orderItem.productPrice}
+              </h2>
             </div>
           ))}
         </div>
         <Separator className="my-2" />
 
-        <div className="grid grid-cols-[2fr_3fr] gap-x-2">
+        <div className="grid grid-cols-[3fr_1fr] gap-x-2">
           <h2>TOTAL</h2>
           <h2 className="mr-5 text-end">$ {total}</h2>
         </div>
