@@ -1,7 +1,7 @@
 import {
   adminProcedure,
   createTRPCRouter,
-  protectedProcedure,
+  publicProcedure,
 } from "@/server/api/trpc";
 import { z } from "zod";
 import { createNewCategory, fetchAllCategory } from "./category.services";
@@ -20,7 +20,7 @@ export const categoryRouter = createTRPCRouter({
       return newCategory;
     }),
 
-  getAllCategory: protectedProcedure.query(async ({}) => {
+  getAllCategory: publicProcedure.query(async ({}) => {
     const allCategory = await fetchAllCategory();
     return allCategory;
   }),
