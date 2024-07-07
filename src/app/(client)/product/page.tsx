@@ -1,3 +1,4 @@
+import Footer from "@/components/page-components/footer";
 import { api } from "@/trpc/server";
 import CategoryFilter from "./_components/CategoryFilter";
 import ProductCard from "./_components/ProductCard";
@@ -38,6 +39,7 @@ export default async function ProductPage({
   }
 
   return (
+    <>
     <div className="sticky top-[calc(90px+2rem)]">
       <h1 className="mb-6 py-8 text-3xl font-semibold">Out Product</h1>
 
@@ -65,5 +67,7 @@ export default async function ProductPage({
         </div>
       </div>
     </div>
+    <Footer />
+  </>
   );
 }
